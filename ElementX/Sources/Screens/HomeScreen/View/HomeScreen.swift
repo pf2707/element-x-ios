@@ -15,23 +15,72 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
+    @State var selectedIndex = 0
+    
     var body: some View {
-        HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
-            .alert(item: $context.alertInfo)
-            .alert(item: $context.leaveRoomAlertItem,
-                   actions: leaveRoomAlertActions,
-                   message: leaveRoomAlertMessage)
-            .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-            .toolbar { toolbar }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
-            .track(screen: .Home)
-            .bloom(context: context,
-                   scrollViewAdapter: scrollViewAdapter,
-                   isNewBloomEnabled: context.viewState.isNewBloomEnabled)
-            .sentryTrace("\(Self.self)")
+        VStack {
+            switch selectedIndex {
+            case 1:
+                HomeScreenContent(context: context, scrollViewAdapter: scrollViewAdapter)
+                    .alert(item: $context.alertInfo)
+                    .alert(item: $context.leaveRoomAlertItem,
+                           actions: leaveRoomAlertActions,
+                           message: leaveRoomAlertMessage)
+                    .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+                    .toolbar { toolbar }
+                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+                    .track(screen: .Home)
+                    .bloom(context: context,
+                           scrollViewAdapter: scrollViewAdapter,
+                           isNewBloomEnabled: context.viewState.isNewBloomEnabled)
+                    .sentryTrace("\(Self.self)")
+            default: Color.white.frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+            HStack(alignment: .center) {
+                tabButton(title: "Home", icon: "ic_tab_home", index: 0)
+                tabButton(title: "Chat", icon: "ic_tab_chat", index: 1)
+
+                Button {
+                    withAnimation {
+                        selectedIndex = 2
+                    }
+                } label: {
+                    VStack {
+                        Image("ic_tab_add")
+                    }
+                    .frame(maxWidth: .infinity)
+                }
+                
+                tabButton(title: "Payment", icon: "ic_tab_payment", index: 3)
+                tabButton(title: "Call", icon: "ic_tab_call", index: 4)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .padding(.top, 10)
+            .background(Color.white)
+            .shadow(color: Color.theme(.black).opacity(0.1), radius: 20, x: 0, y: -4)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     // MARK: - Private
+    private func tabButton(title: String, icon: String, index: Int) -> some View {
+        Button {
+            withAnimation {
+                selectedIndex = index
+            }
+        } label: {
+            VStack(spacing: 4) {
+                Spacer()
+                Image(icon)
+                Text(title)
+                    .font(.Roboto(.bold, size: 12))
+                    .foregroundColor(Color.theme(.gray_737373))
+                Spacer()
+            }
+            .frame(maxWidth: .infinity)
+        }
+    }
         
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {

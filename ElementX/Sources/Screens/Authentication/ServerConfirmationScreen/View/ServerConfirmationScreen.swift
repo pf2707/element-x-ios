@@ -90,14 +90,15 @@ struct ServerConfirmationScreen: View {
             .buttonStyle(.compound(.primary))
             .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.continue)
             
-            if case .confirmation = context.viewState.mode {
-                Button { context.send(viewAction: .changeServer) } label: {
-                    Text(L10n.screenServerConfirmationChangeServer)
-                        .font(.compound.bodyLGSemibold)
-                        .padding(14)
-                }
-                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
-            }
+            // <thaith> - hide "Change account provider"
+//            if case .confirmation = context.viewState.mode {
+//                Button { context.send(viewAction: .changeServer) } label: {
+//                    Text(L10n.screenServerConfirmationChangeServer)
+//                        .font(.compound.bodyLGSemibold)
+//                        .padding(14)
+//                }
+//                .accessibilityIdentifier(A11yIdentifiers.serverConfirmationScreen.changeServer)
+//            }
         }
     }
 }

@@ -23,7 +23,8 @@ enum RoomListFilter: Int, CaseIterable, Identifiable {
     case invites
     
     static var availableFilters: [RoomListFilter] {
-        RoomListFilter.allCases
+//        RoomListFilter.allCases
+        [.unreads, .rooms, .favourites]
     }
     
     var localizedName: String {

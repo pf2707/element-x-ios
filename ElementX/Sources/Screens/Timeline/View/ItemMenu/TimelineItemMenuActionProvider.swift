@@ -96,9 +96,9 @@ struct TimelineItemMenuActionProvider {
             actions.append(.removeCaption)
         }
         
-        if isViewSourceEnabled {
-            actions.append(.viewSource)
-        }
+//        if isViewSourceEnabled {
+//            actions.append(.viewSource)
+//        }
         
         if !item.isOutgoing {
             secondaryActions.append(.report)
@@ -137,11 +137,11 @@ struct TimelineItemMenuActionProvider {
     }
     
     private func makeEncryptedItemActions(_ encryptedItem: EncryptedRoomTimelineItem) -> TimelineItemMenuActions? {
-        var actions: [TimelineItemMenuAction] = [.copyPermalink]
+        let actions: [TimelineItemMenuAction] = [.copyPermalink]
 
-        if isViewSourceEnabled {
-            actions.append(.viewSource)
-        }
+//        if isViewSourceEnabled {
+//            actions.append(.viewSource)
+//        }
                 
         return .init(isReactable: false,
                      actions: actions,

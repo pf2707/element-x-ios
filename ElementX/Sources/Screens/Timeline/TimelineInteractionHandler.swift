@@ -167,10 +167,10 @@ class TimelineInteractionHandler {
             actionsSubject.send(.displayThread(itemID: eventTimelineItem.id))
         case .forward(let itemID):
             actionsSubject.send(.displayMessageForwarding(itemID: itemID))
-        case .viewSource:
-            let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
-            MXLog.info("Showing debug info for \(eventTimelineItem.id)")
-            actionsSubject.send(.showDebugInfo(debugInfo))
+//        case .viewSource:
+//            let debugInfo = timelineController.debugInfo(for: eventTimelineItem.id)
+//            MXLog.info("Showing debug info for \(eventTimelineItem.id)")
+//            actionsSubject.send(.showDebugInfo(debugInfo))
         case .report:
             actionsSubject.send(.displayReportContent(itemID: itemID, senderID: eventTimelineItem.sender.id))
         case .react:

@@ -22,9 +22,36 @@ enum FontRoboto: String {
     case italic = "Roboto-Italic"
 }
 
+enum ColorTheme: UInt {
+    
+    case gray_737373 = 0x737373
+    
+    case blue_005CA7 = 0x005CA7
+    
+    case black = 0x000000
+    
+    case white = 0xFFFFFF
+}
+
 extension Font {
     
     static func Roboto(_ name: FontRoboto, size: CGFloat) -> Font {
         .custom(name.rawValue, size: size)
+    }
+}
+
+extension Color {
+    init(hex: UInt, alpha: Double = 1) {
+        self.init(
+            .sRGB,
+            red: Double((hex >> 16) & 0xff) / 255,
+            green: Double((hex >> 08) & 0xff) / 255,
+            blue: Double((hex >> 00) & 0xff) / 255,
+            opacity: alpha
+        )
+    }
+    
+    static func theme(_ name: ColorTheme, alpha: Double = 1) -> Color {
+        Color(hex: name.rawValue, alpha: alpha)
     }
 }

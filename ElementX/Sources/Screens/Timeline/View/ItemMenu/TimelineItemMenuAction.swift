@@ -67,7 +67,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     case reply(isThread: Bool)
     case replyInThread
     case forward(itemID: TimelineItemIdentifier)
-    case viewSource
+//    case viewSource
     case report
     case react
     case toggleReaction(key: String)
@@ -93,7 +93,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for an item that failed to send.
     var canAppearInFailedEcho: Bool {
         switch self {
-        case .copy, .edit, .redact, .viewSource, .editPoll:
+        case .copy, .edit, .redact, /*.viewSource,*/ .editPoll:
             true
         default:
             false
@@ -103,7 +103,7 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
     /// Whether the action should be shown for a redacted item.
     var canAppearInRedacted: Bool {
         switch self {
-        case .viewSource, .unpin, .viewInRoomTimeline:
+        case /*.viewSource,*/ .unpin, .viewInRoomTimeline:
             true
         default:
             false
@@ -166,8 +166,8 @@ enum TimelineItemMenuAction: Identifiable, Hashable {
             Label(L10n.actionForward, icon: \.forward)
         case .redact:
             Label(L10n.actionRemoveMessage, icon: \.delete)
-        case .viewSource:
-            Label(L10n.actionViewSource, icon: \.code)
+//        case .viewSource:
+//            Label(L10n.actionViewSource, icon: \.code)
         case .report:
             Label(L10n.actionReportContent, icon: \.chatProblem)
         case .react:
