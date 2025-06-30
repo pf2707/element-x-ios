@@ -25,11 +25,23 @@ enum FontRoboto: String {
 enum ColorTheme: UInt {
     
     case gray_737373 = 0x737373
-    
+    case gray_FAFAFA = 0xFAFAFA
+    case gray_AFAEAE = 0xAFAEAE
+    case gray_F6F6F6 = 0xF6F6F6
+    case gray_A3A3A3 = 0xA3A3A3
+    case gray_525252 = 0x525252
+    case gray_DFE2EB = 0xDFE2EB
+    case gray_F2F2F3 = 0xF2F2F3
+    case gray_8C8C8C = 0x8C8C8C
+    case gray_E6E6E6 = 0xE6E6E6
+
     case blue_005CA7 = 0x005CA7
     
     case black = 0x000000
+    case black_181718 = 0x181718
     
+    case red_B91C1C = 0xB91C1C
+
     case white = 0xFFFFFF
 }
 

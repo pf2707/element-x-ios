@@ -30,10 +30,12 @@ struct ImageRoomTimelineView: View {
                 if let attributedCaption = timelineItem.content.formattedCaption {
                     FormattedBodyText(attributedString: attributedCaption,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      isOutgoing: timelineItem.isOutgoing,
                                       boostFontSize: timelineItem.shouldBoost)
                 } else if let caption = timelineItem.content.caption {
                     FormattedBodyText(text: caption,
                                       additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                                      isOutgoing: timelineItem.isOutgoing,
                                       boostFontSize: timelineItem.shouldBoost)
                 }
             }

@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_action_create_group_with.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

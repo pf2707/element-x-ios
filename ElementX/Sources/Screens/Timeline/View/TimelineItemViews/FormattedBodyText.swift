@@ -17,8 +17,24 @@ struct FormattedBodyText: View {
     private let defaultAttributesContainer: AttributeContainer = {
         var container = AttributeContainer()
         // Equivalent to compound's bodyLG
-        container.font = UIFont.preferredFont(forTextStyle: .body)
-        container.foregroundColor = UIColor.compound.textPrimary
+        
+        container.font = UIFont(name: "Roboto-Regular", size: 14)
+        container.foregroundColor = UIColor.white
+
+//        container.font = UIFont.preferredFont(forTextStyle: .body)
+//        container.foregroundColor = UIColor.compound.textPrimary
+        return container
+    }()
+    
+    private let receiverAttributesContainer: AttributeContainer = {
+        var container = AttributeContainer()
+        // Equivalent to compound's bodyLG
+        
+        container.font = UIFont(name: "Roboto-Regular", size: 14)
+        container.foregroundColor = UIColor.black
+
+//        container.font = UIFont.preferredFont(forTextStyle: .body)
+//        container.foregroundColor = UIColor.compound.textPrimary
         return container
     }()
         
@@ -31,7 +47,11 @@ struct FormattedBodyText: View {
         }
         
         // Required to allow the underlying TextView to use  body font when no font is specifie in the AttributedString.
-        adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
+        if isOutgoing {
+            adjustedAttributedString.mergeAttributes(defaultAttributesContainer, mergePolicy: .keepCurrent)
+        } else {
+            adjustedAttributedString.mergeAttributes(receiverAttributesContainer, mergePolicy: .keepCurrent)
+        }
         
         let string = String(attributedString.characters)
         
@@ -42,17 +62,22 @@ struct FormattedBodyText: View {
         return adjustedAttributedString.formattedComponents
     }
     
+    let isOutgoing: Bool
+    
     init(attributedString: AttributedString,
          additionalWhitespacesCount: Int = 0,
+         isOutgoing: Bool,
          boostFontSize: Bool = false) {
         self.attributedString = attributedString
         self.additionalWhitespacesCount = additionalWhitespacesCount
         self.boostFontSize = boostFontSize
+        self.isOutgoing = isOutgoing
     }
     
-    init(text: String, additionalWhitespacesCount: Int = 0, boostFontSize: Bool = false) {
+    init(text: String, additionalWhitespacesCount: Int = 0, isOutgoing: Bool, boostFontSize: Bool = false) {
         self.init(attributedString: AttributedString(text),
                   additionalWhitespacesCount: additionalWhitespacesCount,
+                  isOutgoing: isOutgoing,
                   boostFontSize: boostFontSize)
     }
     
@@ -184,18 +209,18 @@ struct FormattedBodyText_Previews: PreviewProvider, TestablePreview {
             VStack(alignment: .leading, spacing: 24.0) {
                 ForEach(htmlStrings, id: \.self) { htmlString in
                     if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
-                        FormattedBodyText(attributedString: attributedString)
+                        FormattedBodyText(attributedString: attributedString, isOutgoing: true)
                             .bubbleBackground()
                     }
                 }
-                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."))
+                FormattedBodyText(attributedString: AttributedString("Some plain text wrapped in an AttributedString."), isOutgoing: true)
                     .bubbleBackground()
-                FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                FormattedBodyText(text: "Some plain text that's not an attributed component.", isOutgoing: false)
                     .bubbleBackground()
-                FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
+                FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.", isOutgoing: false)
                     .bubbleBackground()
                 
-                FormattedBodyText(text: "❤️", boostFontSize: true)
+                FormattedBodyText(text: "❤️", isOutgoing: false, boostFontSize: true)
                     .bubbleBackground()
             }
             .padding()

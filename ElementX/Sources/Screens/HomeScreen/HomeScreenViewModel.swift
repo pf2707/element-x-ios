@@ -211,6 +211,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         case .declineInvite(let roomIdentifier):
             Task { await showDeclineInviteConfirmationAlert(roomID: roomIdentifier) }
+            
+        case .muteRoom(let roomIdentifier):
+            break
+        case .unmuteRoom(let roomIdentifier):
+            break
         }
     }
     

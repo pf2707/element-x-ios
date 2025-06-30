@@ -2225,6 +2225,7 @@
 		A433BE28B40D418237BE37B5 /* ReportContentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreen.swift; sourceTree = "<group>"; };
 		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
+		A4E38BA12E0E7E7F00B7FD38 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		A54AAF72E821B4084B7E4298 /* PinnedEventsTimelineFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedEventsTimelineFlowCoordinator.swift; sourceTree = "<group>"; };
 		A69869844D2B6F5BD9AABF85 /* OIDCConfigurationProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCConfigurationProxy.swift; sourceTree = "<group>"; };
 		A6B19D10B102956066AF117B /* PollOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionView.swift; sourceTree = "<group>"; };
@@ -2341,7 +2342,6 @@
 		B81B6170DB690013CEB646F4 /* MapLibreModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapLibreModels.swift; sourceTree = "<group>"; };
 		B8516302ACCA94A0E680AB3B /* VoiceMessageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceMessageButton.swift; sourceTree = "<group>"; };
 		B858A61F2A570DFB8DE570A7 /* AggregratedReaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AggregratedReaction.swift; sourceTree = "<group>"; };
-		B88CE0A058727BC68EEEC6B6 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
 		B8A3B7637DDBD6AA97AC2545 /* CameraPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPicker.swift; sourceTree = "<group>"; };
 		B8F28602AC7AC881AED37EBA /* NavigationCoordinators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationCoordinators.swift; sourceTree = "<group>"; };
 		B902EA6CD3296B0E10EE432B /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
@@ -3671,8 +3671,8 @@
 		40D9A816C45E0278C29DF883 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				A4E38BA12E0E7E7F00B7FD38 /* ShareExtension.entitlements */,
 				505ADA084C0B38A0C4AD2574 /* Info.plist */,
-				B88CE0A058727BC68EEEC6B6 /* ShareExtension.entitlements */,
 				203D1ACC20287F8986C959D3 /* target.yml */,
 			);
 			path = SupportingFiles;

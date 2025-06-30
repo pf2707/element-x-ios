@@ -40,7 +40,10 @@ struct LocationRoomTimelineView: View {
                 .clipped()
             }
         } else {
-            FormattedBodyText(text: timelineItem.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+            FormattedBodyText(text: timelineItem.body,
+                              additionalWhitespacesCount: timelineItem.additionalWhitespaces(),
+                              isOutgoing: timelineItem.isOutgoing
+            )
         }
     }
 
@@ -57,7 +60,8 @@ struct LocationRoomTimelineView: View {
     @ViewBuilder
     private var descriptionView: some View {
         if let description = timelineItem.content.description, !description.isEmpty {
-            FormattedBodyText(text: description)
+            FormattedBodyText(text: description,
+                              isOutgoing: timelineItem.isOutgoing)
                 .padding(8)
         }
     }

@@ -226,14 +226,15 @@ private struct MessageComposerStyleModifier<Header: View>: ViewModifier {
         }
         .padding(.horizontal, 12.0)
         .clipShape(composerShape)
-        .background {
-            ZStack {
-                composerShape
-                    .fill(Color.compound.bgSubtleSecondary)
-                composerShape
-                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-            }
-        }
+        /// <thaith> - comment to make it as design
+//        .background {
+//            ZStack {
+//                composerShape
+//                    .fill(Color.compound.bgSubtleSecondary)
+//                composerShape
+//                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+//            }
+//        }
     }
     
     @ViewBuilder

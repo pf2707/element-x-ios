@@ -20,11 +20,13 @@ struct RoomAttachmentPicker: View {
         Menu {
             menuContent
         } label: {
-            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
-                .scaledPadding(7, relativeTo: .compound.headingLG)
-                .foregroundColor(
-                    isEnabled ? .compound.iconPrimary : .compound.iconDisabled
-                )
+            Image("ic_attachment")
+                .padding(.bottom, 12)
+//            CompoundIcon(asset: Asset.Images.composerAttachment, size: .custom(30), relativeTo: .compound.headingLG)
+//                .scaledPadding(7, relativeTo: .compound.headingLG)
+//                .foregroundColor(
+//                    isEnabled ? .compound.iconPrimary : .compound.iconDisabled
+//                )
         }
         .buttonStyle(RoomAttachmentPickerButtonStyle())
         .accessibilityLabel(L10n.actionAddToTimeline)

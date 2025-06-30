@@ -31,14 +31,17 @@ struct ComposerToolbar: View {
                 bottomBar
             }
         }
-        .padding(.leading, 5)
-        .padding(.trailing, 8)
-        .padding(.bottom, context.composerFormattingEnabled ? 8 : 12)
+        .padding(.leading, 24)
+        .padding(.trailing, 24)
+        .padding(.top, 12)
+        .padding(.bottom, 12/*context.composerFormattingEnabled ? 8 : 12*/)
         .background {
             if context.composerFormattingEnabled {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
                     .ignoresSafeArea()
+            } else {
+                Color.theme(.gray_F6F6F6)
             }
         }
         .readFrame($frame)
@@ -102,10 +105,17 @@ struct ComposerToolbar: View {
     private var mainTopBarContent: some View {
         ZStack(alignment: .bottom) {
             topBarLayout {
+                Button {
+                    
+                } label: {
+                    Image("ic_tool_payment")
+                }
+                .padding(.bottom, 14)
+                
+                messageComposer
                 if !context.composerFormattingEnabled {
                     RoomAttachmentPicker(context: context)
                 }
-                messageComposer
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
             
@@ -142,8 +152,14 @@ struct ComposerToolbar: View {
                         .accessibilityLabel(L10n.actionConfirm)
                 }
             } else {
-                SendButton(action: sendMessage)
-                    .accessibilityLabel(L10n.actionSend)
+                Button {
+                    sendMessage()
+                } label: {
+                    Image("ic_tool_send")
+                }
+                .accessibilityLabel(L10n.actionSend)
+//                SendButton(action: sendMessage)
+//                    .accessibilityLabel(L10n.actionSend)
             }
         }
         .scaledPadding(4, relativeTo: .compound.headingLG)

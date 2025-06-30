@@ -8,6 +8,7 @@
 import Combine
 import Foundation
 import UIKit
+import SwiftUI
 
 enum HomeScreenViewModelAction: Equatable {
     case presentRoom(roomIdentifier: String)
@@ -46,6 +47,9 @@ enum HomeScreenViewAction {
     
     case acceptInvite(roomIdentifier: String)
     case declineInvite(roomIdentifier: String)
+    
+    case muteRoom(roomIdentifier: String)
+    case unmuteRoom(roomIdentifier: String)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -142,8 +146,9 @@ struct HomeScreenViewState: BindableState {
 struct HomeScreenViewStateBindings {
     var filtersState = RoomListFiltersState()
     var searchQuery = ""
-    var isSearchFieldFocused = false
-    
+    var isSearchFieldFocused: Bool = false
+    var showActionForRoom: HomeScreenRoom?
+
     var alertInfo: AlertInfo<UUID>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
 }

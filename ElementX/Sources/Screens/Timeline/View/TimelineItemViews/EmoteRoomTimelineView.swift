@@ -14,9 +14,9 @@ struct EmoteRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedString = timelineItem.content.formattedBody {
-                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(), isOutgoing: false)
             } else {
-                FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(), isOutgoing: false)
             }
         }
     }

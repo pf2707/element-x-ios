@@ -17,6 +17,8 @@ struct HomeScreenRoomCell: View {
     let context: HomeScreenViewModel.Context
     let isSelected: Bool
     
+    var openCellActionBlock: ((HomeScreenRoom) -> (Void))? = nil
+    
     private let verticalInsets = 12.0
     private let horizontalInsets = 16.0
     
@@ -40,6 +42,10 @@ struct HomeScreenRoomCell: View {
             }
             .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
+            .contentShape(Rectangle())
+            .onLongPressGesture(minimumDuration: 0.4) {
+                openCellActionBlock?(room)
+            }
         }
         .buttonStyle(HomeScreenRoomCellButtonStyle(isSelected: isSelected))
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
@@ -77,34 +83,13 @@ struct HomeScreenRoomCell: View {
     private var header: some View {
         HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.compound.bodyLGSemibold)
-                .foregroundColor(.compound.textPrimary)
+                .font(.Roboto(.semibold, size: 16))
+                .foregroundColor(.theme(.black_181718))
+//                .font(.compound.bodyLGSemibold)
+//                .foregroundColor(.compound.textPrimary)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
-            
-            if let timestamp = room.timestamp {
-                Text(timestamp)
-                    .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
-                    .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
-            }
-        }
-    }
-    
-    @ViewBuilder
-    private var footer: some View {
-        HStack(alignment: .firstTextBaseline, spacing: 0) {
-            ZStack(alignment: .topLeading) {
-                // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
-                Text(" \n ")
-                    .lastMessageFormatting()
-                    .hidden()
-                    .environment(\.redactionReasons, []) // Always maintain consistent height
-                
-                lastMessage
-            }
-            
             Spacer()
-            
             HStack(spacing: 8) {
                 if room.badges.isCallShown {
                     CompoundIcon(\.videoCallSolid, size: .xSmall, relativeTo: .compound.bodySM)
@@ -125,6 +110,31 @@ struct HomeScreenRoomCell: View {
                 }
             }
             .foregroundColor(room.isHighlighted ? .compound.iconAccentTertiary : .compound.iconQuaternary)
+        }
+    }
+    
+    @ViewBuilder
+    private var footer: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 0) {
+            ZStack(alignment: .topLeading) {
+                // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
+                Text(" \n ")
+                    .lastMessageFormatting()
+                    .hidden()
+                    .environment(\.redactionReasons, []) // Always maintain consistent height
+                
+                lastMessage
+            }
+            
+            Spacer()
+            
+            if let timestamp = room.timestamp {
+                Text(timestamp)
+                    .font(room.isHighlighted ? .Roboto(.semibold, size: 12) : .Roboto(.regular, size: 12))
+                    .foregroundColor(room.isHighlighted ? .theme(.gray_8C8C8C) : .theme(.gray_8C8C8C))
+//                    .font(room.isHighlighted ? .compound.bodySMSemibold : .compound.bodySM)
+//                    .foregroundColor(room.isHighlighted ? .compound.textActionAccent : .compound.textSecondary)
+            }
         }
     }
             
@@ -155,8 +165,10 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 
 private extension View {
     func lastMessageFormatting() -> some View {
-        font(.compound.bodyMD)
-            .foregroundColor(.compound.textSecondary)
+//        font(.compound.bodyMD)
+        font(.Roboto(.regular, size: 12))
+            .foregroundColor(.theme(.gray_737373))
+//            .foregroundColor(.compound.textSecondary)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
     }
@@ -174,7 +186,9 @@ struct HomeScreenRoomCell_Previews: PreviewProvider, TestablePreview {
     static var previews: some View {
         VStack(spacing: 0) {
             ForEach(genericRooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModelGeneric.context, isSelected: false)
+                HomeScreenRoomCell(room: room, context: viewModelGeneric.context, isSelected: false) { aRoom in
+                    
+                }
             }
             
             HomeScreenRoomCell(room: .placeholder(), context: viewModelGeneric.context, isSelected: false)

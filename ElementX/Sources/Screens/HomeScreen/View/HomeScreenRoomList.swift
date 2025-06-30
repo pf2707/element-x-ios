@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeScreenRoomList: View {
     @ObservedObject var context: HomeScreenViewModel.Context
+    @Binding var showRoomAction: Bool
     
     var body: some View {
         // Hide the room list when the search bar is focused but the query is empty
@@ -33,56 +34,59 @@ struct HomeScreenRoomList: View {
             case .room:
                 let isSelected = context.viewState.selectedRoomID == room.id
                 
-                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected)
-                    .contextMenu {
-                        if room.badges.isDotShown {
-                            Button {
-                                context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.screenRoomlistMarkAsRead, icon: \.markAsRead)
-                            }
-                        } else {
-                            Button {
-                                context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
-                            }
-                        }
-                        
-                        if room.isFavourite {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
-                            } label: {
-                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
-                            }
-                        } else {
-                            Button {
-                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
-                            } label: {
-                                Label(L10n.commonFavourite, icon: \.favourite)
-                            }
-                        }
-                        
-                        Button {
-                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
-                        } label: {
-                            Label(L10n.commonSettings, icon: \.settings)
-                        }
-                        
-                        if context.viewState.reportRoomEnabled {
-                            Button(role: .destructive) {
-                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
-                            } label: {
-                                Label(L10n.actionReportRoom, icon: \.chatProblem)
-                            }
-                        }
-                        
-                        Button(role: .destructive) {
-                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
-                        } label: {
-                            Label(L10n.actionLeaveRoom, icon: \.leave)
-                        }
-                    }
+                HomeScreenRoomCell(room: room, context: context, isSelected: isSelected) { room in
+                    context.showActionForRoom = room
+                    showRoomAction = true
+                }
+//                    .contextMenu {
+//                        if room.badges.isDotShown {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsRead(roomIdentifier: room.id))
+//                            } label: {
+//                                Label(L10n.screenRoomlistMarkAsRead, icon: \.markAsRead)
+//                            }
+//                        } else {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsUnread(roomIdentifier: room.id))
+//                            } label: {
+//                                Label(L10n.screenRoomlistMarkAsUnread, icon: \.markAsUnread)
+//                            }
+//                        }
+//                        
+//                        if room.isFavourite {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: false))
+//                            } label: {
+//                                Label(L10n.commonFavourited, icon: \.favouriteSolid)
+//                            }
+//                        } else {
+//                            Button {
+//                                context.send(viewAction: .markRoomAsFavourite(roomIdentifier: room.id, isFavourite: true))
+//                            } label: {
+//                                Label(L10n.commonFavourite, icon: \.favourite)
+//                            }
+//                        }
+//                        
+//                        Button {
+//                            context.send(viewAction: .showRoomDetails(roomIdentifier: room.id))
+//                        } label: {
+//                            Label(L10n.commonSettings, icon: \.settings)
+//                        }
+//                        
+//                        if context.viewState.reportRoomEnabled {
+//                            Button(role: .destructive) {
+//                                context.send(viewAction: .reportRoom(roomIdentifier: room.id))
+//                            } label: {
+//                                Label(L10n.actionReportRoom, icon: \.chatProblem)
+//                            }
+//                        }
+//                        
+//                        Button(role: .destructive) {
+//                            context.send(viewAction: .leaveRoom(roomIdentifier: room.id))
+//                        } label: {
+//                            Label(L10n.actionLeaveRoom, icon: \.leave)
+//                        }
+//                    }
             }
         }
     }

@@ -30,7 +30,8 @@ struct RoomScreen: View {
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomScreen.scrollToBottom)
             }
-            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+            .background(Color.theme(.gray_FAFAFA).ignoresSafeArea())
+//            .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
             .overlay(alignment: .top) {
                 pinnedItemsBanner
             }
@@ -173,21 +174,31 @@ struct RoomScreen: View {
         if !ProcessInfo.processInfo.isiOSAppOnMac {
             ToolbarItem(placement: .primaryAction) {
                 if context.viewState.shouldShowCallButton {
-                    callButton
+                    voiceCallButton
                         .disabled(!context.viewState.canJoinCall)
                 }
+            }
+            ToolbarItem(placement: .primaryAction) {
+                if context.viewState.shouldShowCallButton {
+                    videoCallButton
+                        .disabled(!context.viewState.canJoinCall)
+                }
+            }
+            ToolbarItem(placement: .primaryAction) {
+                infoButton
             }
         }
     }
     
     @ViewBuilder
-    private var callButton: some View {
+    private var voiceCallButton: some View {
         if context.viewState.hasOngoingCall {
             Button {
                 context.send(viewAction: .displayCall)
             } label: {
-                Label(L10n.actionJoin, icon: \.videoCallSolid)
-                    .labelStyle(.titleAndIcon)
+                Image("ic_nav_voice_call")
+//                Label(L10n.actionJoin, icon: \.videoCallSolid)
+//                    .labelStyle(.titleAndIcon)
             }
             .buttonStyle(ElementCallButtonStyle())
             .accessibilityLabel(L10n.a11yJoinCall)
@@ -196,11 +207,47 @@ struct RoomScreen: View {
             Button {
                 context.send(viewAction: .displayCall)
             } label: {
-                CompoundIcon(\.videoCallSolid)
+                Image("ic_nav_voice_call")
+//                CompoundIcon(\.videoCallSolid)
             }
             .accessibilityLabel(L10n.a11yStartCall)
             .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
         }
+    }
+    
+    @ViewBuilder
+    private var videoCallButton: some View {
+        if context.viewState.hasOngoingCall {
+            Button {
+                context.send(viewAction: .displayCall)
+            } label: {
+                Image("ic_nav_video_call")
+//                Label(L10n.actionJoin, icon: \.videoCallSolid)
+//                    .labelStyle(.titleAndIcon)
+            }
+            .buttonStyle(ElementCallButtonStyle())
+            .accessibilityLabel(L10n.a11yJoinCall)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+        } else {
+            Button {
+                context.send(viewAction: .displayCall)
+            } label: {
+                Image("ic_nav_video_call")
+//                CompoundIcon(\.videoCallSolid)
+            }
+            .accessibilityLabel(L10n.a11yStartCall)
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.joinCall)
+        }
+    }
+    
+    @ViewBuilder
+    private var infoButton: some View {
+        Button {
+            context.send(viewAction: .displayRoomDetails)
+        } label: {
+            Image("ic_nav_info")
+        }
+        .accessibilityLabel(L10n.a11yViewDetails)
     }
 }
 

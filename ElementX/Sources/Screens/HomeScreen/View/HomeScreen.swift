@@ -15,7 +15,7 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     
-    @State var selectedIndex = 0
+    @State var selectedIndex = 1
     
     var body: some View {
         VStack {
@@ -26,9 +26,10 @@ struct HomeScreen: View {
                     .alert(item: $context.leaveRoomAlertItem,
                            actions: leaveRoomAlertActions,
                            message: leaveRoomAlertMessage)
-                    .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
-                    .toolbar { toolbar }
-                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
+//                    .toolbar(.hidden)
+//                    .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
+//                    .toolbar { toolbar }
+//                    .background(Color.compound.bgCanvasDefault.ignoresSafeArea())
                     .track(screen: .Home)
                     .bloom(context: context,
                            scrollViewAdapter: scrollViewAdapter,
@@ -82,28 +83,28 @@ struct HomeScreen: View {
         }
     }
         
-    @ToolbarContentBuilder
-    private var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
-            Button {
-                context.send(viewAction: .showSettings)
-            } label: {
-                LoadableAvatarImage(url: context.viewState.userAvatarURL,
-                                    name: context.viewState.userDisplayName,
-                                    contentID: context.viewState.userID,
-                                    avatarSize: .user(on: .home),
-                                    mediaProvider: context.mediaProvider)
-                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
-                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
-                    .compositingGroup()
-            }
-            .accessibilityLabel(L10n.commonSettings)
-        }
-        
-        ToolbarItem(placement: .primaryAction) {
-            newRoomButton
-        }
-    }
+//    @ToolbarContentBuilder
+//    private var toolbar: some ToolbarContent {
+//        ToolbarItem(placement: .navigationBarLeading) {
+//            Button {
+//                context.send(viewAction: .showSettings)
+//            } label: {
+//                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+//                                    name: context.viewState.userDisplayName,
+//                                    contentID: context.viewState.userID,
+//                                    avatarSize: .user(on: .home),
+//                                    mediaProvider: context.mediaProvider)
+//                    .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
+//                    .overlayBadge(10, isBadged: context.viewState.requiresExtraAccountSetup)
+//                    .compositingGroup()
+//            }
+//            .accessibilityLabel(L10n.commonSettings)
+//        }
+//        
+//        ToolbarItem(placement: .primaryAction) {
+//            newRoomButton
+//        }
+//    }
     
     @ViewBuilder
     private var newRoomButton: some View {

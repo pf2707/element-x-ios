@@ -20,9 +20,9 @@ struct NoticeRoomTimelineView: View, TextBasedRoomTimelineViewProtocol {
             
             Label {
                 if let attributedString = timelineItem.content.formattedBody {
-                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                    FormattedBodyText(attributedString: attributedString, additionalWhitespacesCount: timelineItem.additionalWhitespaces(), isOutgoing: timelineItem.isOutgoing)
                 } else {
-                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces())
+                    FormattedBodyText(text: timelineItem.content.body, additionalWhitespacesCount: timelineItem.additionalWhitespaces(), isOutgoing: timelineItem.isOutgoing)
                 }
             } icon: {
                 CompoundIcon(\.info, size: .small, relativeTo: .compound.bodyLG)
