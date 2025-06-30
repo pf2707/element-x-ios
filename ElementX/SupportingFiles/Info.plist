@@ -120,20 +120,5 @@
 	<string>$(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)</string>
 	<key>productionAppName</key>
 	<string>$(PRODUCTION_APP_NAME)</string>
-    <key>UIAppFonts</key>
-    <array>
-        <string>Roboto-Black.ttf</string>
-        <string>Roboto-Bold.ttf</string>
-        <string>Roboto-ExtraBold.ttf</string>
-        <string>Roboto-Light.ttf</string>
-        <string>Roboto-LightItalic.ttf</string>
-        <string>Roboto-Medium.ttf</string>
-        <string>Roboto-Regular.ttf</string>
-        <string>Roboto-Italic.ttf</string>
-        <string>Roboto-SemiBold.ttf</string>
-        <string>Roboto-SemiBoldItalic.ttf</string>
-        <string>Roboto-Thin.ttf</string>
-        <string>Roboto-ThinItalic.ttf</string>
-    </array>
 </dict>
 </plist>
