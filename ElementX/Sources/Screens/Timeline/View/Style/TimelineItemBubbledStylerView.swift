@@ -55,15 +55,15 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
 
-                    HStack(spacing: 0) {
-                        if !timelineItem.isOutgoing {
-                            Spacer()
-                        }
-                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
-                            .environmentObject(context)
-                            .padding(.top, 8)
-                            .padding(.bottom, 3)
-                    }
+//                    HStack(spacing: 0) {
+//                        if !timelineItem.isOutgoing {
+//                            Spacer()
+//                        }
+//                        TimelineItemStatusView(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus)
+//                            .environmentObject(context)
+//                            .padding(.top, 8)
+//                            .padding(.bottom, 3)
+//                    }
                 }
                 .padding(.horizontal, bubbleHorizontalPadding)
                 .padding(.leading, bubbleAvatarPadding)
@@ -172,10 +172,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         contentWithReply
-            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
             .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
                               insets: timelineItem.bubbleInsets,
                               color: timelineItem.bubbleBackgroundColor)
+            .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
     }
     
     @ViewBuilder

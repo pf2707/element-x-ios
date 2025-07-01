@@ -16,12 +16,14 @@ struct TimelineDeliveryStatusView: View {
 
     let deliveryStatus: Status
 
-    private var icon: CompoundIcon {
+    @ViewBuilder
+    private var icon: some View {
         switch deliveryStatus {
         case .sending:
-            return CompoundIcon(\.circle, size: .xSmall, relativeTo: .compound.bodyMD)
+            CompoundIcon(\.circle, size: .xSmall, relativeTo: .compound.bodyMD)
         case .sent:
-            return CompoundIcon(\.checkCircle, size: .xSmall, relativeTo: .compound.bodyMD)
+            Image("ic_deliveried")
+//            return CompoundIcon(\.checkCircle, size: .xSmall, relativeTo: .compound.bodyMD)
         }
     }
     

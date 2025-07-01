@@ -21,18 +21,20 @@ struct TimelineReadReceiptsView: View {
     }
 
     var body: some View {
-        HStack(spacing: 2) {
-            StackedAvatarsView(overlap: 6,
-                               lineWidth: 1,
-                               avatars: avatars, avatarSize: .user(on: .readReceipt),
-                               mediaProvider: context.mediaProvider)
-                .padding(-1)
-            if timelineItem.properties.orderedReadReceipts.count > displayNumber {
-                Text("+\(remaining)")
-                    .font(.compound.bodySM)
-                    .foregroundColor(.compound.textPrimary)
-            }
-        }
+        //<thaith>: update read icon as figma
+        Image("ic_read")
+//        HStack(spacing: 2) {
+//            StackedAvatarsView(overlap: 6,
+//                               lineWidth: 1,
+//                               avatars: avatars, avatarSize: .user(on: .readReceipt),
+//                               mediaProvider: context.mediaProvider)
+//                .padding(-1)
+//            if timelineItem.properties.orderedReadReceipts.count > displayNumber {
+//                Text("+\(remaining)")
+//                    .font(.compound.bodySM)
+//                    .foregroundColor(.compound.textPrimary)
+//            }
+//        }
         .onTapGesture {
             context.send(viewAction: .displayReadReceipts(itemID: timelineItem.id))
         }
