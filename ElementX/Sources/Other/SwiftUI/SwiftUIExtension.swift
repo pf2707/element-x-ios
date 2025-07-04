@@ -35,13 +35,28 @@ enum ColorTheme: UInt {
     case gray_8C8C8C = 0x8C8C8C
     case gray_E6E6E6 = 0xE6E6E6
     case gray_AAAAAA = 0xAAAAAA
+    case gray_F2F1F1 = 0xF2F1F1
+    case gray_434343 = 0x434343
 
     case blue_005CA7 = 0x005CA7
     
     case black = 0x000000
     case black_181718 = 0x181718
-    
+    case black_262626 = 0x262626
+
     case red_B91C1C = 0xB91C1C
+    
+    case purple_F2F4FF = 0xFFF2F4FF
+    case purple_DAE4FE = 0xFFDAE4FE
+    
+    case yellow_F0F2B8 = 0xFFF0F2B8
+    
+    case orange_F8D9C8 = 0xFFF8D9C8
+    
+    case blue_D4F3FC = 0xFFD4F3FC
+    case green_E1FAE8 = 0xFFE1FAE8
+    
+    case pink_F4DAEE = 0xFFF4DAEE
 
     case white = 0xFFFFFF
 }

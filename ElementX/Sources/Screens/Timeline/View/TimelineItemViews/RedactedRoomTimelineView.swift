@@ -13,8 +13,9 @@ struct RedactedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.body, icon: \.delete, iconSize: .small, relativeTo: .compound.bodyLG)
-                .labelStyle(RoomTimelineViewLabelStyle())
+            Label(timelineItem.body, icon: \.delete, iconSize: .small, relativeTo: .Roboto(.regular, size: 12))
+                .foregroundColor(timelineItem.isOutgoing ? Color.theme(.white) : Color.theme(.black))
+//                .labelStyle(RoomTimelineViewLabelStyle())
                 .imageScale(.small) // Smaller icon so that the bubble remains rounded on the outside.
         }
     }

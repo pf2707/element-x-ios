@@ -16,7 +16,7 @@ struct VoiceMessageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             VoiceMessageRoomTimelineContent(timelineItem: timelineItem,
                                             playerState: playerState)
-                .frame(maxWidth: 400)
+                .frame(maxWidth: 200)
         }
     }
 }
@@ -30,6 +30,7 @@ struct VoiceMessageRoomTimelineContent: View {
     
     var body: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
+                                     isOutgoing: timelineItem.isOutgoing,
                                      onPlayPause: onPlaybackPlayPause,
                                      onSeek: { onPlaybackSeek($0) },
                                      onScrubbing: { onPlaybackScrubbing($0) })

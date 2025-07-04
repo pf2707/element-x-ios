@@ -884,6 +884,7 @@
 		A4B0BAD62A12ED76BD611B79 /* BadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C1FA515B3B0D61EF1E907D2D /* BadgeView.swift */; };
 		A4B123C635F70DDD4BC2FAC9 /* BlockedUsersScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E76A706B3EEA32B882DA5E2D /* BlockedUsersScreenViewModelProtocol.swift */; };
 		A4C29D373986AFE4559696D5 /* SecureBackupKeyBackupScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4525E8C0FBDD27D1ACE90952 /* SecureBackupKeyBackupScreenViewModelProtocol.swift */; };
+		A4E38BA32E13E64100B7FD38 /* ChatToolFunctionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4E38BA22E13E64100B7FD38 /* ChatToolFunctionView.swift */; };
 		A4E885358D7DD5A072A06824 /* PostHog in Frameworks */ = {isa = PBXBuildFile; productRef = CCE5BF78B125320CBF3BB834 /* PostHog */; };
 		A51C65E5A3C9F2464A91A380 /* AuthenticationClientBuilderFactoryMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0554FEA301486A8CFA475D5A /* AuthenticationClientBuilderFactoryMock.swift */; };
 		A583B70939707197B0B21DFC /* DeferredFulfillmentTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DEBB74427E24AF30CDB131B7 /* DeferredFulfillmentTests.swift */; };
@@ -2226,6 +2227,7 @@
 		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
 		A4E38BA12E0E7E7F00B7FD38 /* ShareExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ShareExtension.entitlements; sourceTree = "<group>"; };
+		A4E38BA22E13E64100B7FD38 /* ChatToolFunctionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatToolFunctionView.swift; sourceTree = "<group>"; };
 		A54AAF72E821B4084B7E4298 /* PinnedEventsTimelineFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinnedEventsTimelineFlowCoordinator.swift; sourceTree = "<group>"; };
 		A69869844D2B6F5BD9AABF85 /* OIDCConfigurationProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCConfigurationProxy.swift; sourceTree = "<group>"; };
 		A6B19D10B102956066AF117B /* PollOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollOptionView.swift; sourceTree = "<group>"; };
@@ -3411,6 +3413,7 @@
 				16D353E10A64172D863769BF /* TombstonedAvatarImage.swift */,
 				E10DA51DBC8C7E1460DBCCBD /* UserProfileListRow.swift */,
 				AD529C89924EE32CE307F36F /* VisualListItem.swift */,
+				A4E38BA22E13E64100B7FD38 /* ChatToolFunctionView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -7258,6 +7261,7 @@
 				D8517B8EED58D24396FB71E7 /* DeactivateAccountScreenViewModel.swift in Sources */,
 				0F81DEE3E02A6549B20DF09A /* DeactivateAccountScreenViewModelProtocol.swift in Sources */,
 				68B2DD307C57ECFABBB05323 /* DeclineAndBlockScreen.swift in Sources */,
+				A4E38BA32E13E64100B7FD38 /* ChatToolFunctionView.swift in Sources */,
 				41D03E23B5DC6D633632E4D8 /* DeclineAndBlockScreenCoordinator.swift in Sources */,
 				C02E295B34725A1688FCF5F0 /* DeclineAndBlockScreenModels.swift in Sources */,
 				0743CF689EBDAAF1CC0B4283 /* DeclineAndBlockScreenViewModel.swift in Sources */,

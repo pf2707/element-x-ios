@@ -56,6 +56,8 @@ enum ComposerToolbarViewAction {
     case plainComposerTextChanged
     case didToggleFormattingOptions
     case selectedTextChanged
+    
+    case contact
 }
 
 enum ComposerAttachmentType {

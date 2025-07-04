@@ -14,31 +14,37 @@ struct VoiceMessageRoomPlaybackView: View {
     @ScaledMetric private var waveformLineWidth = 2.0
     @ScaledMetric private var waveformLinePadding = 2.0
     @GestureState var isDragging = false
+    let isOutgoing: Bool
 
     let onPlayPause: () -> Void
     let onSeek: (Double) -> Void
     let onScrubbing: (Bool) -> Void
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .center, spacing: 10) {
             VoiceMessageButton(state: .init(playerState.playerButtonPlaybackState),
-                               size: .medium,
+                               size: .large,
                                action: onPlayPause)
-            Text(timeLabelContent)
-                .lineLimit(1)
-                .font(.compound.bodySMSemibold)
-                .foregroundColor(.compound.textSecondary)
-                .monospacedDigit()
-                .fixedSize(horizontal: true, vertical: true)
-
-            waveformView
-                .waveformInteraction(isDragging: $isDragging,
-                                     progress: playerState.progress,
-                                     showCursor: playerState.showProgressIndicator,
-                                     onSeek: onSeek)
+            VStack(alignment: .leading) {
+                waveformView
+                    .waveformInteraction(isDragging: $isDragging,
+                                         progress: playerState.progress,
+                                         showCursor: playerState.showProgressIndicator,
+                                         onSeek: onSeek)
+                HStack(spacing: 4) {
+                    Image("ic_mic_white_small")
+                    Text(timeLabelContent)
+                        .lineLimit(1)
+                        .font(.Roboto(.medium, size: 12))
+                        .foregroundColor(isOutgoing ? .theme(.white) : .theme(.black))
+                        .monospacedDigit()
+                }
+                .fixedSize()
+            }
         }
         .padding(.leading, 2)
         .padding(.trailing, 8)
+        .padding(.vertical, 5)
         .onChange(of: isDragging) { _, newValue in
             onScrubbing(newValue)
         }
@@ -126,6 +132,7 @@ struct VoiceMessageRoomPlaybackView_Previews: PreviewProvider, TestablePreview {
     
     static var previews: some View {
         VoiceMessageRoomPlaybackView(playerState: playerState,
+                                     isOutgoing: true,
                                      onPlayPause: { },
                                      onSeek: { value in Task { await playerState.updateState(progress: value) } },
                                      onScrubbing: { _ in })

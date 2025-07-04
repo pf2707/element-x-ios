@@ -19,7 +19,8 @@ struct FileRoomTimelineView: View {
                                          caption: timelineItem.content.caption,
                                          formattedCaption: timelineItem.content.formattedCaption,
                                          additionalWhitespaces: timelineItem.additionalWhitespaces(),
-                                         shouldBoost: timelineItem.shouldBoost) {
+                                         shouldBoost: timelineItem.shouldBoost,
+                                         isOutgoing: timelineItem.isOutgoing) {
                 context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
             }
             .accessibilityLabel(L10n.commonFile)
@@ -37,6 +38,7 @@ struct MediaFileRoomTimelineContent: View {
     let additionalWhitespaces: Int
     var shouldBoost = false
     var isAudioFile = false
+    var isOutgoing = false
     
     private var fileDescription: String {
         var fileDescription = "\(filename.validatedFileExtension.uppercased())"
@@ -66,12 +68,12 @@ struct MediaFileRoomTimelineContent: View {
             if let formattedCaption {
                 FormattedBodyText(attributedString: formattedCaption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  isOutgoing: false, // <thaith>: need check "isOutgoing"
+                                  isOutgoing: isOutgoing,
                                   boostFontSize: shouldBoost)
             } else if let caption {
                 FormattedBodyText(text: caption,
                                   additionalWhitespacesCount: additionalWhitespaces,
-                                  isOutgoing: false, // <thaith>: need check "isOutgoing"
+                                  isOutgoing: isOutgoing,
                                   boostFontSize: shouldBoost)
             }
         }
@@ -79,16 +81,14 @@ struct MediaFileRoomTimelineContent: View {
     
     var filePreview: some View {
         Label {
-            VStack(alignment: .leading, spacing: 0) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(filename)
-                    .foregroundStyle(.compound.textPrimary)
-                    .font(.compound.bodyLG)
+                    .foregroundStyle(isOutgoing ? Color.theme(.white) : Color.theme(.black))
+                    .font(.Roboto(.regular, size: 14))
                 Text(fileDescription)
-                    .font(.compound.bodySM)
-                    .foregroundStyle(.compound.textSecondary)
+                    .font(.Roboto(.medium, size: 8))
+                    .foregroundStyle(isOutgoing ? Color.theme(.white) : Color.theme(.black))
             }
-            .font(.compound.bodyLG)
-            .foregroundStyle(.compound.textPrimary)
             .lineLimit(1)
         } icon: {
             CompoundIcon(icon, size: .xSmall, relativeTo: .body)

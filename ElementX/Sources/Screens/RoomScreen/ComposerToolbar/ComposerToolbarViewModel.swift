@@ -251,6 +251,7 @@ final class ComposerToolbarViewModel: ComposerToolbarViewModelType, ComposerTool
             } else {
                 context.plainComposerText = NSAttributedString(string: wysiwygViewModel.attributedContent.text.string)
             }
+        case .contact: break
         }
     }
 

@@ -55,6 +55,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     }
                     .padding(timelineItem.isOutgoing ? .leading : .trailing, 48) // Additional padding to differentiate alignment.
 
+                    // <thaith> Move to show beside time
 //                    HStack(spacing: 0) {
 //                        if !timelineItem.isOutgoing {
 //                            Spacer()
@@ -195,8 +196,9 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .fixedSize(horizontal: false, vertical: true)
                     .padding(4.0)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(Color.compound.bgCanvasDefault)
-                    .cornerRadius(8)
+                    .background(Color.theme(.purple_F2F4FF))
+//                    .background(Color.compound.bgCanvasDefault)
+                    .cornerRadius(10, corners: [.topLeft, .topRight])
                     .layoutPriority(TimelineBubbleLayout.Priority.visibleQuote)
                     .onTapGesture {
                         context.send(viewAction: .focusOnEventID(replyDetails.eventID))

@@ -16,43 +16,52 @@ struct ComposerToolbar: View {
     @FocusState private var composerFocused: Bool
     @State private var frame: CGRect = .zero
     @Environment(\.verticalSizeClass) private var verticalSizeClass
-    
+    @State private var showFunctionToolbar: Bool = false
+
     var body: some View {
-        VStack(spacing: 8) {
-            topBar
-            
-            if context.composerFormattingEnabled {
-                if verticalSizeClass != .compact,
-                   context.composerExpanded {
-                    suggestionView
-                        .padding(.leading, -5)
-                        .padding(.trailing, -8)
+        VStack {
+            VStack(spacing: 8) {
+                topBar
+                
+                if context.composerFormattingEnabled {
+                    if verticalSizeClass != .compact,
+                       context.composerExpanded {
+                        suggestionView
+                            .padding(.leading, -5)
+                            .padding(.trailing, -8)
+                    }
+                    bottomBar
                 }
-                bottomBar
+            }
+            .padding(.leading, 24)
+            .padding(.trailing, 24)
+            .padding(.top, 12)
+            .padding(.bottom, 12/*context.composerFormattingEnabled ? 8 : 12*/)
+            .background {
+                if context.composerFormattingEnabled {
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
+                        .ignoresSafeArea()
+                } else {
+                    Color.theme(.gray_F6F6F6)
+                }
+            }
+            .readFrame($frame)
+            .overlay(alignment: .bottom) {
+                if verticalSizeClass != .compact, !context.composerExpanded {
+                    suggestionView
+                        .offset(y: -frame.height)
+                }
+            }
+            .disabled(!context.viewState.canSend)
+            .alert(item: $context.alertInfo)
+            
+            if showFunctionToolbar {
+                ChatToolFunctionView(context: context)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 206)
             }
         }
-        .padding(.leading, 24)
-        .padding(.trailing, 24)
-        .padding(.top, 12)
-        .padding(.bottom, 12/*context.composerFormattingEnabled ? 8 : 12*/)
-        .background {
-            if context.composerFormattingEnabled {
-                RoundedRectangle(cornerRadius: 20)
-                    .stroke(Color.compound.borderInteractiveSecondary, lineWidth: 0.5)
-                    .ignoresSafeArea()
-            } else {
-                Color.theme(.gray_F6F6F6)
-            }
-        }
-        .readFrame($frame)
-        .overlay(alignment: .bottom) {
-            if verticalSizeClass != .compact, !context.composerExpanded {
-                suggestionView
-                    .offset(y: -frame.height)
-            }
-        }
-        .disabled(!context.viewState.canSend)
-        .alert(item: $context.alertInfo)
     }
     
     private var suggestionView: some View {
@@ -114,7 +123,20 @@ struct ComposerToolbar: View {
                 
                 messageComposer
                 if !context.composerFormattingEnabled {
-                    RoomAttachmentPicker(context: context)
+                    Button {
+                        if composerFocused {
+                            withAnimation {
+                                composerFocused = false
+                            }
+                        }
+                        withAnimation {
+                            showFunctionToolbar = !showFunctionToolbar
+                        }
+                    } label: {
+                        Image("ic_attachment")
+                    }
+                    .padding(.bottom, 12)
+//                    RoomAttachmentPicker(context: context)
                 }
             }
             .opacity(context.viewState.isVoiceMessageModeActivated ? 0 : 1)
@@ -206,6 +228,9 @@ struct ComposerToolbar: View {
         .padding(.trailing, context.composerFormattingEnabled ? 4 : 0)
         .accessibilityIdentifier(A11yIdentifiers.roomScreen.messageComposer)
         .onTapGesture {
+            withAnimation {
+                showFunctionToolbar = false
+            }
             guard !composerFocused else { return }
             composerFocused = true
         }
@@ -213,9 +238,21 @@ struct ComposerToolbar: View {
             guard composerFocused != newValue else { return }
             
             composerFocused = newValue
+            
+            if newValue {
+                withAnimation {
+                    showFunctionToolbar = false
+                }
+            }
         }
         .onChange(of: composerFocused) { _, newValue in
             context.composerFocused = newValue
+            
+            if newValue {
+                withAnimation {
+                    showFunctionToolbar = false
+                }
+            }
         }
         .onChange(of: context.plainComposerText) {
             context.send(viewAction: .plainComposerTextChanged)

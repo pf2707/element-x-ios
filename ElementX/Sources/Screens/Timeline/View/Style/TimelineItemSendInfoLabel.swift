@@ -104,7 +104,11 @@ private struct TimelineItemSendInfoLabel: View {
 //                .cornerRadius(10)
 //                .padding(.trailing, 8)
 //                .padding(.bottom, 8)
-        case .horizontal, .overlay(capsuleStyle: false):
+        case .overlay(capsuleStyle: false):
+            content
+                .padding(.bottom, 4)
+                .padding(.trailing, 4)
+        case .horizontal:
             content
                 .padding(.bottom, -4)
         case .vertical:
@@ -188,15 +192,20 @@ private extension TimelineItemSendInfo {
             //<thaith>: update as Figma
                 .vertical(spacing: 4)
 //            .overlay(capsuleStyle: false)
+        case is VoiceMessageRoomTimelineItem:
+                .overlay(capsuleStyle: false)
         case let message as EventBasedMessageTimelineItemProtocol:
             switch message {
             case is ImageRoomTimelineItem, is VideoRoomTimelineItem:
                 //<thaith>: update as Figma
-                message.hasMediaCaption ? .vertical(spacing: 4) : .overlay(capsuleStyle: true)
+                message.hasMediaCaption ? .vertical(spacing: 4) : .overlay(capsuleStyle: false)
 //                .overlay(capsuleStyle: !message.hasMediaCaption)
-            case is AudioRoomTimelineItem, is FileRoomTimelineItem:
+            case is AudioRoomTimelineItem:
                 // swiftlint:disable:next void_function_in_ternary
                 message.hasMediaCaption ? .overlay(capsuleStyle: false) : .horizontal(spacing: 0) // No spacing as the content already contains it.
+            case is FileRoomTimelineItem:
+                //<thaith>: update as Figma
+                    .vertical(spacing: 4)
             case let locationTimelineItem as LocationRoomTimelineItem:
                 .overlay(capsuleStyle: locationTimelineItem.content.geoURI != nil)
             default:
@@ -206,6 +215,8 @@ private extension TimelineItemSendInfo {
             .overlay(capsuleStyle: true)
         case is PollRoomTimelineItem:
             .vertical(spacing: 16)
+        case is RedactedRoomTimelineItem:
+                .vertical(spacing: 4)
         default:
             .horizontal()
         }

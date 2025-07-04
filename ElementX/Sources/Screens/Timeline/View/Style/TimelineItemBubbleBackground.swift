@@ -33,21 +33,26 @@ private struct TimelineItemBubbleBackgroundModifier: ViewModifier {
         content
             .padding(insets)
             .background(color)
-            .cornerRadius(12, corners: roundedCorners)
+            .cornerRadius(10, corners: roundedCorners)
     }
     
     private var roundedCorners: UIRectCorner {
         switch timelineGroupStyle {
         case .single:
-            return .allCorners
+            if isOutgoing {
+                return [.topLeft, .bottomLeft, .bottomRight]
+            } else {
+                return [.topRight, .bottomRight, .bottomLeft]
+            }
+//            return .allCorners
         case .first:
             if isOutgoing {
-                return [.topLeft, .topRight, .bottomLeft]
+                return [.topLeft, .bottomLeft, .bottomRight]
             } else {
-                return [.topLeft, .topRight, .bottomRight]
+                return [.topRight, .bottomRight, .bottomLeft]
             }
         case .middle:
-            return isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
+            return isOutgoing ? [.topLeft, .bottomLeft, .bottomRight] : [.topRight, .bottomRight, .bottomLeft]
         case .last:
             if isOutgoing {
                 return [.topLeft, .bottomLeft, .bottomRight]

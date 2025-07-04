@@ -19,6 +19,7 @@ struct VoiceMessageButton: View {
     enum Size {
         case small
         case medium
+        case large
     }
 
     let state: State
@@ -30,6 +31,8 @@ struct VoiceMessageButton: View {
             _buttonSize = .init(wrappedValue: 30)
         case .medium:
             _buttonSize = .init(wrappedValue: 36)
+        case .large:
+            _buttonSize = .init(wrappedValue: 40)
         }
         
         self.state = state
