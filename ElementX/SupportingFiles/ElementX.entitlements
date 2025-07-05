@@ -14,7 +14,7 @@
 		<string>applinks:call.element.io</string>
 		<string>applinks:call.element.dev</string>
 		<string>applinks:matrix.to</string>
-		<string>webcredentials:*.element.io</string>
+		<string>webcredentials:*.pareza.im</string>
 	</array>
 	<key>com.apple.developer.usernotifications.communication</key>
 	<true/>
