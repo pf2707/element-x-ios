@@ -80,6 +80,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildTextTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, textMessageContent, isOutgoing)
         case .image(content: let imageMessageContent):
             return buildImageTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, imageMessageContent, isOutgoing)
+        case .gallery(content: let galleryMessageContent):
+            return buildImagesTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, galleryMessageContent, isOutgoing)
         case .video(let videoMessageContent):
             return buildVideoTimelineItem(for: eventItemProxy, messageLikeContent, messageContent, videoMessageContent, isOutgoing)
         case .file(let fileMessageContent):
@@ -126,6 +128,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
     }
     
+    // <<thaith>> - REMOVE COMMENT THIS
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageLikeContent: MsgLikeContent,
                                         _ messageContent: MessageContent,
@@ -147,6 +150,30 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                 deliveryStatus: eventItemProxy.deliveryStatus,
                                                 orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
                                                 encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+    }
+    
+    private func buildImagesTimelineItem(for eventItemProxy: EventTimelineItemProxy,
+                                        _ messageLikeContent: MsgLikeContent,
+                                        _ messageContent: MessageContent,
+                                        _ imagesMessageContent: GalleryMessageContent,
+                                        _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        let item = ImagesRoomTimelineItem(id: eventItemProxy.id,
+                              timestamp: eventItemProxy.timestamp,
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              canBeRepliedTo: eventItemProxy.canBeRepliedTo,
+                              shouldBoost: eventItemProxy.shouldBoost,
+                              sender: eventItemProxy.sender,
+                              content: buildImagesTimelineItemContent(imagesMessageContent),
+                              properties: .init(replyDetails: buildTimelineItemReplyDetails(messageLikeContent.inReplyTo),
+                                                isThreaded: messageLikeContent.threadRoot != nil,
+                                                threadSummary: buildTimelineItemThreadSummary(messageLikeContent.threadSummary),
+                                                isEdited: messageContent.isEdited,
+                                                reactions: buildAggregatedReactions(messageLikeContent.reactions),
+                                                deliveryStatus: eventItemProxy.deliveryStatus,
+                                                orderedReadReceipts: buildOrderedReadReceipts(eventItemProxy.readReceipts),
+                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
+        return item
     }
     
     private func buildVideoTimelineItem(for eventItemProxy: EventTimelineItemProxy,
@@ -512,6 +539,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
     
+    // <<thaith>> - REMOVE COMMENT THIS
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
@@ -536,6 +564,37 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      thumbnailInfo: thumbnailInfo,
                      blurhash: messageContent.info?.blurhash,
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
+    }
+    
+    private func buildImagesTimelineItemContent(_ messageContent: GalleryMessageContent) -> ImagesRoomTimelineItemContent {
+//        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
+//        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        
+        var thumbnailSources: [ImageInfoProxy] = []
+        var imageSources: [ImageInfoProxy] = []
+        for item in messageContent.itemtypes {
+            switch item {
+            case .image(let content):
+                if let thumbProxy = ImageInfoProxy(source: content.info?.thumbnailSource,
+                                              width: content.info?.thumbnailInfo?.width,
+                                              height: content.info?.thumbnailInfo?.height,
+                                              mimeType: content.info?.thumbnailInfo?.mimetype,
+                                              fileSize: content.info?.size.map(UInt.init)) {
+                    thumbnailSources.append(thumbProxy)
+                }
+                
+                let imageProxy = ImageInfoProxy(source: content.source,
+                                                  width: content.info?.width,
+                                                  height: content.info?.height,
+                                                  mimeType: content.info?.mimetype,
+                                                  fileSize: content.info?.size.map(UInt.init))
+                imageSources.append(imageProxy)
+            default: break
+            }
+        }
+        
+        return ImagesRoomTimelineItemContent(imageInfos: imageSources,
+                                             thumbnailInfos: thumbnailSources)
     }
     
     private func buildVideoTimelineItemContent(_ messageContent: VideoMessageContent) -> VideoRoomTimelineItemContent {
@@ -874,8 +933,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
         case .file(let content):
             .file(buildFileTimelineItemContent(content))
+            
+        // <<thaith>> - REMOVE COMMENT THIS
         case .image(let content):
             .image(buildImageTimelineItemContent(content))
+            
+        case .gallery(let content):
+            .images(buildImagesTimelineItemContent(content))
+            
         case .notice(let content):
             .notice(buildNoticeTimelineItemContent(content))
         case .text(let content):

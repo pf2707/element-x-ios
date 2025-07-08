@@ -1,16 +1,14 @@
 //
-// Copyright 2022-2024 New Vector Ltd.
+// Copyright 2025 New Vector Ltd.
 //
 // SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
 // Please see LICENSE files in the repository root for full details.
 //
 
-import UIKit
+import Foundation
 import UniformTypeIdentifiers
 
-struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
-
-// <<thaith>> - REMOVE COMMENT THIS
+struct ImagesRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool
@@ -20,15 +18,15 @@ struct ImageRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     
     let sender: TimelineItemSender
     
-    let content: ImageRoomTimelineItemContent
+    let content: ImagesRoomTimelineItemContent
     
     var properties = RoomTimelineItemProperties()
     
     var body: String {
-        content.caption ?? content.filename
+        "" //content.caption ?? content.filename
     }
     
     var contentType: EventBasedMessageTimelineItemContentType {
-        .image(content)
+        .images(content)
     }
 }

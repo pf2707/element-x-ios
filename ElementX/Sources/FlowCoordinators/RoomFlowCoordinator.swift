@@ -387,8 +387,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case (.pollsHistory, .presentPollForm(let mode), .pollsHistoryForm):
                 presentPollForm(mode: mode)
                 
-            case (_, .presentMediaUploadPreview, .mediaUploadPreview(let fileURL, let threadRootEventID, _)):
-                presentMediaUploadPreviewScreen(for: fileURL, threadRootEventID: threadRootEventID, animated: animated)
+            case (_, .presentMediasUploadPreview, .mediasUploadPreview(let fileURLs, let threadRootEventID, _)):
+                presentMediasUploadPreviewScreen(for: fileURLs, threadRootEventID: threadRootEventID, animated: animated)
                 
             case (_, .presentInviteUsersScreen, .inviteUsersScreen):
                 presentInviteUsersScreen()
@@ -441,7 +441,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .eventFocus(let focusedEvent):
                     roomScreenCoordinator?.focusOnEvent(focusedEvent)
                 case .share(.mediaFile(_, let mediaFile)):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url, threadRootEventID: nil),
+                    // <thaith> - NEED WORK MORE
+                    stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: [mediaFile.url], threadRootEventID: nil),
                                           userInfo: EventUserInfo(animated: animated))
                 case .share(.text(_, let text)):
                     roomScreenCoordinator?.shareText(text)
@@ -478,7 +479,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             
         switch presentationAction {
         case .share(.mediaFile(_, let mediaFile)):
-            stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: mediaFile.url, threadRootEventID: nil),
+            // <thaith> - NEED WORK MORE
+            stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: [mediaFile.url], threadRootEventID: nil),
                                   userInfo: EventUserInfo(animated: animated))
         case .share(.text), .eventFocus:
             break // These are both handled in the coordinator's init.
@@ -535,8 +537,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
                 case .presentMediaUploadPicker(let source):
                     stateMachine.tryEvent(.presentMediaUploadPicker(source: source,
                                                                     threadRootEventID: nil))
-                case .presentMediaUploadPreviewScreen(let url):
-                    stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url,
+                case .presentMediasUploadPreviewScreen(let urls):
+                    stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: urls,
                                                                      threadRootEventID: nil))
                 case .presentEmojiPicker(let itemID, let selectedEmojis):
                     stateMachine.tryEvent(.presentEmojiPicker(itemID: itemID,
@@ -623,8 +625,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .presentMediaUploadPicker(let source, let threadRootEventID):
                 stateMachine.tryEvent(.presentMediaUploadPicker(source: source,
                                                                 threadRootEventID: threadRootEventID))
-            case .presentMediaUploadPreviewScreen(let url, let threadRootEventID):
-                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url,
+            case .presentMediasUploadPreviewScreen(let urls, let threadRootEventID):
+                stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: urls,
                                                                  threadRootEventID: threadRootEventID))
             case .presentLocationPicker(let threadRootEventID):
                 stateMachine.tryEvent(.presentMapNavigator(interactionMode: .picker,
@@ -895,6 +897,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
 
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: userIndicatorController,
                                                                   source: source,
+                                                                  allowMultipleSelections: true,
                                                                   orientationManager: appMediator.windowManager) { [weak self] action in
             guard let self else {
                 return
@@ -903,7 +906,9 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
             case .cancel:
                 navigationStackCoordinator.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
-                stateMachine.tryEvent(.presentMediaUploadPreview(fileURL: url, threadRootEventID: threadRootEventID))
+                stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: [url], threadRootEventID: threadRootEventID))
+            case .selectMediasAtURLs(let urls):
+                stateMachine.tryEvent(.presentMediasUploadPreview(fileURLs: urls, threadRootEventID: threadRootEventID))
             }
         }
 
@@ -916,7 +921,7 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         }
     }
 
-    private func presentMediaUploadPreviewScreen(for url: URL,
+    private func presentMediasUploadPreviewScreen(for urls: [URL],
                                                  threadRootEventID: String?,
                                                  animated: Bool) {
         let stackCoordinator = NavigationStackCoordinator()
@@ -924,8 +929,8 @@ class RoomFlowCoordinator: FlowCoordinatorProtocol {
         let parameters = MediaUploadPreviewScreenCoordinatorParameters(userIndicatorController: userIndicatorController,
                                                                        roomProxy: roomProxy,
                                                                        mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: appSettings),
-                                                                       title: url.lastPathComponent,
-                                                                       url: url,
+                                                                       title: "Preview Medias", /*url.lastPathComponent,*/ // <thaith> - NEED WORK MORE
+                                                                       urls: urls, // <thaith> - NEED WORK MORE
                                                                        threadRootEventID: threadRootEventID,
                                                                        shouldShowCaptionWarning: appSettings.shouldShowMediaCaptionWarning)
 

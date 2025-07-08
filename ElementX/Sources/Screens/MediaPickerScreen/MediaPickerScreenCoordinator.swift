@@ -15,6 +15,7 @@ enum MediaPickerScreenSource {
 
 enum MediaPickerScreenCoordinatorAction {
     case selectMediaAtURL(URL)
+    case selectMediasAtURLs([URL])
     case cancel
 }
 
@@ -22,14 +23,17 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
     private let orientationManager: OrientationManagerProtocol
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let source: MediaPickerScreenSource
+    private let allowMultipleSelections: Bool
     private let callback: (MediaPickerScreenCoordinatorAction) -> Void
     
     init(userIndicatorController: UserIndicatorControllerProtocol,
          source: MediaPickerScreenSource,
+         allowMultipleSelections: Bool,
          orientationManager: OrientationManagerProtocol,
          callback: @escaping (MediaPickerScreenCoordinatorAction) -> Void) {
         self.userIndicatorController = userIndicatorController
         self.source = source
+        self.allowMultipleSelections = allowMultipleSelections
         self.orientationManager = orientationManager
         self.callback = callback
     }
@@ -61,15 +65,19 @@ class MediaPickerScreenCoordinator: CoordinatorProtocol {
         case .camera:
             cameraPicker
         case .photoLibrary:
-            PhotoLibraryPicker(userIndicatorController: userIndicatorController) { [weak self] action in
+            PhotoLibraryPicker(userIndicatorController: userIndicatorController, allowMultipleSelections: allowMultipleSelections) { [weak self] action in
                 switch action {
                 case .cancel:
                     self?.callback(.cancel)
                 case .error(let error):
                     MXLog.error("Failed selecting media from the photo library with error: \(error)")
                     self?.showError()
-                case .selectFile(let url):
-                    self?.callback(.selectMediaAtURL(url))
+                case .selectFiles(let urls):
+                    if urls.count == 1 {
+                        self?.callback(.selectMediaAtURL(urls.first!))
+                    } else {
+                        self?.callback(.selectMediasAtURLs(urls))
+                    }
                 }
             }
         case .documents:

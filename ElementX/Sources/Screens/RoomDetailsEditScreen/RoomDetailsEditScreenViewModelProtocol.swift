@@ -14,4 +14,5 @@ protocol RoomDetailsEditScreenViewModelProtocol {
     var context: RoomDetailsEditScreenViewModelType.Context { get }
     
     func didSelectMediaUrl(url: URL)
+    func didSelectMediaUrls(urls: [URL])
 }

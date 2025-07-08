@@ -29,7 +29,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     var canEditName = false
     var canEditTopic = false
     var avatarURL: URL?
-    var localMedia: MediaInfo?
+    var localMedias: [MediaInfo] = []
 
     var bindings: RoomDetailsEditScreenViewStateBindings
     
@@ -52,7 +52,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     }
     
     var avatarDidChange: Bool {
-        localMedia != nil || avatarURL != initialAvatarURL
+        !localMedias.isEmpty || avatarURL != initialAvatarURL
     }
 
     var canSave: Bool {
@@ -60,7 +60,7 @@ struct RoomDetailsEditScreenViewState: BindableState {
     }
     
     var showDeleteImageAction: Bool {
-        localMedia != nil || avatarURL != nil
+        !localMedias.isEmpty || avatarURL != nil
     }
 }
 

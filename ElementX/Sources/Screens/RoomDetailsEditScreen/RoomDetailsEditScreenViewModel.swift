@@ -63,7 +63,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             actionsSubject.send(.displayMediaPicker)
         case .removeImage:
             state.avatarURL = nil
-            state.localMedia = nil
+            state.localMedias.removeAll()
         }
     }
     
@@ -82,8 +82,41 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
             
             switch mediaResult {
             case .success(.image):
-                state.localMedia = try? mediaResult.get()
+                if let media = try? mediaResult.get() {
+                    state.localMedias = [media]
+                }
             case .failure, .success:
+                userIndicatorController.alertInfo = .init(id: .init())
+            }
+        }
+    }
+    
+    func didSelectMediaUrls(urls: [URL]) {
+        Task {
+            let userIndicatorID = UUID().uuidString
+            defer {
+                userIndicatorController.retractIndicatorWithId(userIndicatorID)
+            }
+            userIndicatorController.submitIndicator(UserIndicator(id: userIndicatorID,
+                                                                  type: .modal(progress: .indeterminate, interactiveDismissDisabled: true, allowsInteraction: false),
+                                                                  title: L10n.commonLoading,
+                                                                  persistent: true))
+            
+            let mediaResults = await mediaUploadingPreprocessor.processMedias(at: urls)
+            
+            var medias: [MediaInfo] = []
+            for mediaResult in mediaResults {
+                switch mediaResult {
+                case .success(.image):
+                    if let media = try? mediaResult.get() {
+                        medias.append(media)
+                    }
+                default: break
+                }
+            }
+            state.localMedias = medias
+            
+            if medias.isEmpty {
                 userIndicatorController.alertInfo = .init(id: .init())
             }
         }
@@ -106,7 +139,7 @@ class RoomDetailsEditScreenViewModel: RoomDetailsEditScreenViewModelType, RoomDe
                 try await withThrowingTaskGroup(of: Void.self) { group in
                     if state.avatarDidChange {
                         group.addTask {
-                            if let localMedia = await self.state.localMedia {
+                            if let localMedia = await self.state.localMedias.first {
                                 try await self.roomProxy.uploadAvatar(media: localMedia).get()
                             } else if await self.state.avatarURL == nil {
                                 try await self.roomProxy.removeAvatar().get()

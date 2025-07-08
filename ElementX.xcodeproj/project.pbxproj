@@ -877,6 +877,10 @@
 		A405C6E52E0AA75000CDEB47 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A405C6C32E0AA75000CDEB47 /* Roboto-Bold.ttf */; };
 		A405C6E62E0AA75000CDEB47 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A405C6CA2E0AA75000CDEB47 /* Roboto-Light.ttf */; };
 		A405C6E82E0AA7C600CDEB47 /* SwiftUIExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A405C6E72E0AA7C600CDEB47 /* SwiftUIExtension.swift */; };
+		A43389142E1BCCBD00431F09 /* ImagesRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43389132E1BCCBD00431F09 /* ImagesRoomTimelineView.swift */; };
+		A43389162E1BCD5600431F09 /* ImagesRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43389152E1BCD5600431F09 /* ImagesRoomTimelineItem.swift */; };
+		A43389182E1BCD6A00431F09 /* ImagesRoomTimelineItemContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43389172E1BCD6A00431F09 /* ImagesRoomTimelineItemContent.swift */; };
+		A433891A2E1CDDC300431F09 /* ImagesMediaEventsTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A43389192E1CDDC300431F09 /* ImagesMediaEventsTimelineView.swift */; };
 		A439B456D0761D6541745CC3 /* NSRegularExpresion.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95BAC0F6C9644336E9567EE6 /* NSRegularExpresion.swift */; };
 		A440D4BC02088482EC633A88 /* KeychainControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E94DCFEE803E5ABAE8ACCE /* KeychainControllerProtocol.swift */; };
 		A46B93EA564F539CEC252ECC /* ThreadTimelineScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B69AEA8755382DB34892FB7B /* ThreadTimelineScreenModels.swift */; };
@@ -2223,6 +2227,10 @@
 		A40C19719687984FD9478FBE /* Task.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Task.swift; sourceTree = "<group>"; };
 		A40F1985065500F0E7F61A27 /* PollFormScreenViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PollFormScreenViewModelProtocol.swift; sourceTree = "<group>"; };
 		A4216C12C0369A8AB059EDE9 /* TimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineController.swift; sourceTree = "<group>"; };
+		A43389132E1BCCBD00431F09 /* ImagesRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesRoomTimelineView.swift; sourceTree = "<group>"; };
+		A43389152E1BCD5600431F09 /* ImagesRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesRoomTimelineItem.swift; sourceTree = "<group>"; };
+		A43389172E1BCD6A00431F09 /* ImagesRoomTimelineItemContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesRoomTimelineItemContent.swift; sourceTree = "<group>"; };
+		A43389192E1CDDC300431F09 /* ImagesMediaEventsTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagesMediaEventsTimelineView.swift; sourceTree = "<group>"; };
 		A433BE28B40D418237BE37B5 /* ReportContentScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportContentScreen.swift; sourceTree = "<group>"; };
 		A436057DBEA1A23CA8CB1FD7 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		A443FAE2EE820A5790C35C8D /* et */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = et; path = et.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -3988,6 +3996,7 @@
 				FC9044BE0E4A66F5B963E834 /* AudioFileEventsTimelineView.swift */,
 				430C73079A84654BF46A7FF5 /* FileMediaEventsTimelineView.swift */,
 				1FF584D757E768EA7776A532 /* ImageMediaEventsTimelineView.swift */,
+				A43389192E1CDDC300431F09 /* ImagesMediaEventsTimelineView.swift */,
 				13F354AD441E2FD83DED89AF /* SeparatorMediaEventsTimelineView.swift */,
 				2B1FB56520A847DD2532D5C8 /* VideoMediaEventsTimelineView.swift */,
 				AD3521DF92391551E02004D8 /* VoiceMessageMediaEventsTimelineView.swift */,
@@ -4749,6 +4758,8 @@
 				5098DA7799946A61E34A2373 /* FileRoomTimelineItem.swift */,
 				216F0DDC98F2A2C162D09C28 /* FileRoomTimelineItemContent.swift */,
 				3DFE4453AB0B34C203447162 /* ImageRoomTimelineItem.swift */,
+				A43389172E1BCD6A00431F09 /* ImagesRoomTimelineItemContent.swift */,
+				A43389152E1BCD5600431F09 /* ImagesRoomTimelineItem.swift */,
 				B2B5EDCD05D50BA9B815C66C /* ImageRoomTimelineItemContent.swift */,
 				1B2AC540DE619B36832A5DB5 /* LocationRoomTimelineItem.swift */,
 				CD6613DE16AD26B3A74DA1F5 /* LocationRoomTimelineItemContent.swift */,
@@ -5677,6 +5688,7 @@
 				C258C9C815272911A5B132C3 /* FormattedBodyText.swift */,
 				59B7CC77B82C6C67DE3AD869 /* HighlightedTimelineItemModifier.swift */,
 				C5599255A6C98EBDA77B76E6 /* ImageRoomTimelineView.swift */,
+				A43389132E1BCCBD00431F09 /* ImagesRoomTimelineView.swift */,
 				ED49073BB1C1FC649DAC2CCD /* LocationRoomTimelineView.swift */,
 				3F54FA7C5CB7B342EF9B9B2F /* NoticeRoomTimelineView.swift */,
 				4E7F7A975514E850A834B29F /* PaginationIndicatorRoomTimelineView.swift */,
@@ -7124,6 +7136,7 @@
 				733E2B19AB1FDA3B93293A28 /* AppLockSetupPINScreen.swift in Sources */,
 				9696ECAFB4F0C079C5C2A526 /* AppLockSetupPINScreenCoordinator.swift in Sources */,
 				E4B07FF075C99D04D9AF792D /* AppLockSetupPINScreenModels.swift in Sources */,
+				A433891A2E1CDDC300431F09 /* ImagesMediaEventsTimelineView.swift in Sources */,
 				0F6C8033FA60CFD36F7CA205 /* AppLockSetupPINScreenViewModel.swift in Sources */,
 				4C356F5CCB4CDC99BFA45185 /* AppLockSetupPINScreenViewModelProtocol.swift in Sources */,
 				4E8A2A2CFEB212F14E49E1A1 /* AppLockSetupSettingsScreen.swift in Sources */,
@@ -7349,6 +7362,7 @@
 				55D18AA4F4A2257642EBDB94 /* GlobalSearchScreenViewModel.swift in Sources */,
 				E32A18802EB37EEE3EF7B965 /* GlobalSearchScreenViewModelProtocol.swift in Sources */,
 				E8C4D9F93F0DCED211D5F187 /* HTMLParserStyle.swift in Sources */,
+				A43389182E1BCD6A00431F09 /* ImagesRoomTimelineItemContent.swift in Sources */,
 				0C1E537A49ABB386F7554D4A /* HighlightedTimelineItemModifier.swift in Sources */,
 				964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */,
 				62C5876C4254C58C2086F0DE /* HomeScreenContent.swift in Sources */,
@@ -7795,6 +7809,7 @@
 				D02DEB36D32A72A1B365E452 /* SessionVerificationScreenCoordinator.swift in Sources */,
 				183CFD972E055C5600995797 /* RoomPowerLevelsProxyMock.swift in Sources */,
 				5710AAB27D5D866292C1FE06 /* SessionVerificationScreenModels.swift in Sources */,
+				A43389162E1BCD5600431F09 /* ImagesRoomTimelineItem.swift in Sources */,
 				601AB75BD52B0B4276CEB84A /* SessionVerificationScreenStateMachine.swift in Sources */,
 				4A8287E5281B44A8754BE509 /* SessionVerificationScreenViewModel.swift in Sources */,
 				762DB0973865293F0C3D3D7B /* SessionVerificationScreenViewModelProtocol.swift in Sources */,
@@ -7958,6 +7973,7 @@
 				1A3B073568D1DC8F76F1F3A0 /* UserProfileScreen.swift in Sources */,
 				6AEB650311F694A5702255C9 /* UserProfileScreenCoordinator.swift in Sources */,
 				D4CB979EB4FE26AAD9F9A72B /* UserProfileScreenModels.swift in Sources */,
+				A43389142E1BCCBD00431F09 /* ImagesRoomTimelineView.swift in Sources */,
 				AC1DB27A4134470846BE49F6 /* UserProfileScreenViewModel.swift in Sources */,
 				46A183C6125A669AEB005699 /* UserProfileScreenViewModelProtocol.swift in Sources */,
 				69A9B430397C15075D86193F /* UserPropertiesExt.swift in Sources */,

@@ -54,7 +54,7 @@ struct RoomDetailsEditScreen: View {
         Button {
             context.send(viewAction: .presentMediaSource)
         } label: {
-            OverridableAvatarImage(overrideURL: context.viewState.localMedia?.thumbnailURL,
+            OverridableAvatarImage(overrideURL: context.viewState.localMedias.first?.thumbnailURL,
                                    url: context.viewState.avatarURL,
                                    name: context.viewState.initialName,
                                    contentID: context.viewState.roomID,

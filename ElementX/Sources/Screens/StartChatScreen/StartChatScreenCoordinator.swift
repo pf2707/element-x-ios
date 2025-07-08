@@ -142,13 +142,16 @@ final class StartChatScreenCoordinator: CoordinatorProtocol {
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, allowMultipleSelections: false, orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
             case .selectMediaAtURL(let url):
                 processAvatar(from: url)
+            case .selectMediasAtURLs(_):
+                //Not allow multiple selections for changing avatar
+                break
             }
         }
         

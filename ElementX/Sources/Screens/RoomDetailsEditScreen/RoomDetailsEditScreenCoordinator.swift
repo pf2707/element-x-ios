@@ -66,6 +66,7 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
         
         let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController,
                                                                   source: source,
+                                                                  allowMultipleSelections: true,
                                                                   orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
@@ -74,6 +75,9 @@ final class RoomDetailsEditScreenCoordinator: CoordinatorProtocol {
             case .selectMediaAtURL(let url):
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaUrl(url: url)
+            case .selectMediasAtURLs(let urls):
+                parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
+                viewModel.didSelectMediaUrls(urls: urls)
             }
         }
         

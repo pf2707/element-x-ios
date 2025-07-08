@@ -37,6 +37,7 @@ enum ColorTheme: UInt {
     case gray_AAAAAA = 0xAAAAAA
     case gray_F2F1F1 = 0xF2F1F1
     case gray_434343 = 0x434343
+    case gray_E7E7E7 = 0xE7E7E7
 
     case blue_005CA7 = 0x005CA7
     

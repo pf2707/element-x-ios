@@ -155,8 +155,14 @@ enum TimelineMediaPreviewItem: Equatable {
                 timelineItem = audioRoomTimelineItem
             case .file(let fileRoomTimelineItem):
                 timelineItem = fileRoomTimelineItem
-            case .image(let imageRoomTimelineItem):
-                timelineItem = imageRoomTimelineItem
+                
+                // <<thaith>> - REMOVE COMMENT THIS
+//            case .image(let imageRoomTimelineItem):
+//                timelineItem = imageRoomTimelineItem
+                
+            case .images(let imagesRoomTimelineItem):
+                timelineItem = imagesRoomTimelineItem
+                
             case .video(let videoRoomTimelineItem):
                 timelineItem = videoRoomTimelineItem
             default:

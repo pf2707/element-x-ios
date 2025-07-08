@@ -29,8 +29,13 @@ struct RoomTimelineItemView: View {
             TextRoomTimelineView(timelineItem: item)
         case .separator(let item):
             SeparatorRoomTimelineView(timelineItem: item)
-        case .image(let item):
-            ImageRoomTimelineView(timelineItem: item)
+        
+            // <<thaith>> - REMOVE COMMENT THIS
+//        case .image(let item):
+//            ImageRoomTimelineView(timelineItem: item)
+            
+        case .images(let item): ImagesRoomTimelineView(timelineItem: item)
+            
         case .video(let item):
             VideoRoomTimelineView(timelineItem: item)
         case .audio(let item):

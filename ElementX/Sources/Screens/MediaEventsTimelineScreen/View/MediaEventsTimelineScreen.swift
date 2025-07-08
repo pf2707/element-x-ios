@@ -127,8 +127,11 @@ struct MediaEventsTimelineScreen: View {
     @ViewBuilder
     private func viewForTimelineItem(_ item: RoomTimelineItemViewState) -> some View {
         switch item.type {
-        case .image(let timelineItem):
-            ImageMediaEventsTimelineView(timelineItem: timelineItem)
+        // <<thaith>> - REMOVE COMMENT THIS
+//        case .image(let timelineItem):
+//            ImageMediaEventsTimelineView(timelineItem: timelineItem)
+        case .images(let timelineItem):
+            ImagesMediaEventsTimelineView(timelineItem: timelineItem)
         case .video(let timelineItem):
             VideoMediaEventsTimelineView(timelineItem: timelineItem)
         case .file(let timelineItem):

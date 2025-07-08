@@ -10,6 +10,7 @@ import Foundation
 import MatrixRustSDK
 
 final class TimelineProxy: TimelineProxyProtocol {
+    
     private let timeline: Timeline
     
     private var backPaginationStatusObservationToken: TaskHandle?
@@ -327,6 +328,45 @@ final class TimelineProxy: TimelineProxyProtocol {
             MXLog.info("Finished sending image")
         } catch {
             MXLog.error("Failed sending image with error: \(error)")
+            return .failure(.sdkError(error))
+        }
+        
+        return .success(())
+    }
+
+    func sendImages(urls: [URL],
+                   thumbnailURLs: [URL],
+                   imageInfos: [ImageInfo],
+                   caption: String?,
+                   threadRootEventID: String?,
+                    requestHandle: @MainActor (SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+        MXLog.info("Sending images")
+        
+        let replyParameters: ReplyParameters? = if let threadRootEventID {
+            ReplyParameters(eventId: threadRootEventID, enforceThread: true, replyWithinThread: false)
+        } else {
+            nil
+        }
+        
+        do {
+            var items: [GalleryItemInfo] = []
+            for i in 0 ..< urls.count {
+                let url = urls[i]
+                let thumbnailUrl = thumbnailURLs[i]
+                let imageInfo = imageInfos[i]
+                
+                // <<thaith>> - FIX HERE FOR MIX IMAGES AND VIDEOS
+                let itemInfo: GalleryItemInfo = .image(imageInfo: imageInfo, filename: url.path(percentEncoded: false), caption: caption, formattedCaption: nil, thumbnailPath: thumbnailUrl.path(percentEncoded: false))
+                items.append(itemInfo)
+            }
+            let handle = try timeline.sendGallery(params: .init(caption: caption, formattedCaption: nil, mentions: nil, replyParams: replyParameters), itemInfos: items)
+            
+            await requestHandle(handle)
+            
+            try await handle.join()
+            MXLog.info("Finished sending images")
+        } catch {
+            MXLog.error("Failed sending images with error: \(error)")
             return .failure(.sdkError(error))
         }
         
