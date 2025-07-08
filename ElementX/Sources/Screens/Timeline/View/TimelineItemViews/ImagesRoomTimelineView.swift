@@ -23,14 +23,14 @@ struct ImagesRoomTimelineView: View {
                             .cornerRadius(20, corners: .topLeft)
                             .cornerRadius(8, corners: .bottomRight)
                         loadableImage(content: timelineItem.content.imageInfos[1])
-                            .cornerRadius(2, corners: .topRight)
+                            .cornerRadius(timelineItem.isOutgoing ? 2 : 20, corners: .topRight)
                             .cornerRadius(8, corners: .bottomLeft)
                     }
                     GridRow {
                         loadableImage(content: timelineItem.content.imageInfos[2])
                             .cornerRadius(20, corners: .bottomLeft)
                             .cornerRadius(8, corners: .topRight)
-                        loadableImage(content: timelineItem.content.imageInfos[3])
+                        loadableImage(content: timelineItem.content.imageInfos[3], remaining: timelineItem.content.imageInfos.count - 4)
                             .cornerRadius(8, corners: .topLeft)
                             .cornerRadius(20, corners: .bottomRight)
                     }
@@ -64,18 +64,31 @@ struct ImagesRoomTimelineView: View {
     
     
     @ViewBuilder
-    private func loadableImage(content: ImageInfoProxy) -> some View {
-        LoadableImage(mediaSource: content.source,
-                      mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
-                      blurhash: nil,// content.blurhash,
-                      size: content.size,
-                      mediaProvider: context?.mediaProvider) {
-            placeholder
+    private func loadableImage(content: ImageInfoProxy, remaining: Int = 0) -> some View {
+        ZStack {
+            LoadableImage(mediaSource: content.source,
+                          mediaType: .timelineItem(uniqueID: timelineItem.id.uniqueID),
+                          blurhash: nil,// content.blurhash,
+                          size: content.size,
+                          mediaProvider: context?.mediaProvider) {
+                placeholder
+            }
+    //        .timelineMediaFrame(imageInfo: content)
+              .aspectRatio(contentMode: .fill)
+              
+            if remaining > 0 {
+                Color.theme(.black).opacity(0.65)
+                    .overlay {
+                        Text("+ \(remaining)")
+                            .foregroundColor(.white)
+                            .font(.Roboto(.medium, size: 20))
+                    }
+            }
         }
-//        .timelineMediaFrame(imageInfo: content)
-          .aspectRatio(contentMode: .fill)
-          .frame(width: 120, height: 120)
-        
+        .frame(width: 120, height: 120)
+        .onTapGesture {
+            context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+        }
         
 //        if timelineItem.content.contentType == .gif {
 //            LoadableImage(mediaSource: timelineItem.content.imageInfo.source,
