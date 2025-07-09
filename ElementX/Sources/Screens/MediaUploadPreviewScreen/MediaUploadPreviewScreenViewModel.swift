@@ -15,12 +15,13 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
     private let userIndicatorController: UserIndicatorControllerProtocol
     private let roomProxy: JoinedRoomProxyProtocol
     private let mediaUploadingPreprocessor: MediaUploadingPreprocessor
-    private let url: URL
+    private let urls: [URL]
     private let threadRootEventID: String?
     
-    private var processingTask: Task<Result<MediaInfo, MediaUploadingPreprocessorError>, Never>
+    private var processingTask: Task<[Result<MediaInfo, MediaUploadingPreprocessorError>], Never>
     private var requestHandle: SendAttachmentJoinHandleProtocol?
-    
+    private var requestGalleryHandle: SendGalleryJoinHandleProtocol?
+
     private var actionsSubject: PassthroughSubject<MediaUploadPreviewScreenViewModelAction, Never> = .init()
     
     var actions: AnyPublisher<MediaUploadPreviewScreenViewModelAction, Never> {
@@ -31,19 +32,19 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
          roomProxy: JoinedRoomProxyProtocol,
          mediaUploadingPreprocessor: MediaUploadingPreprocessor,
          title: String?,
-         url: URL,
+         urls: [URL],
          threadRootEventID: String?,
          shouldShowCaptionWarning: Bool) {
         self.userIndicatorController = userIndicatorController
         self.roomProxy = roomProxy
         self.mediaUploadingPreprocessor = mediaUploadingPreprocessor
-        self.url = url
+        self.urls = urls
         self.threadRootEventID = threadRootEventID
         
         // Start processing the media whilst the user is reviewing it/adding a caption.
-        processingTask = Task { await mediaUploadingPreprocessor.processMedia(at: url) }
+        processingTask = Task { await mediaUploadingPreprocessor.processMedias(at: urls) }
         
-        super.init(initialViewState: MediaUploadPreviewScreenViewState(url: url,
+        super.init(initialViewState: MediaUploadPreviewScreenViewState(urls: urls,
                                                                        title: title,
                                                                        shouldShowCaptionWarning: shouldShowCaptionWarning,
                                                                        isRoomEncrypted: roomProxy.infoPublisher.value.isEncrypted))
@@ -56,30 +57,54 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         switch viewAction {
         case .send:
             startLoading()
-            
+            //<thaith>: ATTACHMENTS ARE SENT HERE
             Task {
-                switch await processingTask.value {
-                case .success(let mediaInfo):
-                    switch await sendAttachment(mediaInfo: mediaInfo,
-                                                caption: caption,
-                                                threadRootEventID: threadRootEventID) {
+                if await processingTask.value.count == 1 {
+                    switch await processingTask.value.first {
+                    case .success(let mediaInfo):
+                        switch await sendAttachment(mediaInfo: mediaInfo,
+                                                    caption: caption,
+                                                    threadRootEventID: threadRootEventID) {
+                        case .success:
+                            actionsSubject.send(.dismiss)
+                        case .failure(let error):
+                            MXLog.error("Failed sending attachment with error: \(error)")
+                            showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
+                        }
+                        
+                        stopLoading()
+                    case .failure(let error):
+                        MXLog.error("Failed processing media to upload with error: \(error)")
+                        showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
+                        stopLoading()
+                    case .none:
+                        stopLoading()
+                    }
+                } else {
+                    var mediaInfos: [MediaInfo] = []
+                    for result in await processingTask.value {
+                        switch result {
+                        case .success(let mediaInfo):
+                            mediaInfos.append(mediaInfo)
+                        case .failure(let error):
+                            MXLog.error("Failed processing media to upload with error: \(error)")
+                        }
+                    }
+                    switch await sendAttachments(mediaInfos: mediaInfos, caption: caption, threadRootEventID: threadRootEventID) {
                     case .success:
                         actionsSubject.send(.dismiss)
                     case .failure(let error):
-                        MXLog.error("Failed sending attachment with error: \(error)")
+                        MXLog.error("Failed sending attachments with error: \(error)")
                         showError(label: L10n.screenMediaUploadPreviewErrorFailedSending)
                     }
                     
-                    stopLoading()
-                case .failure(let error):
-                    MXLog.error("Failed processing media to upload with error: \(error)")
-                    showError(label: L10n.screenMediaUploadPreviewErrorFailedProcessing)
                     stopLoading()
                 }
             }
             
         case .cancel:
             requestHandle?.cancel()
+            requestGalleryHandle?.cancel()
             actionsSubject.send(.dismiss)
         }
     }
@@ -125,6 +150,47 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         }
     }
     
+    private func sendAttachments(mediaInfos: [MediaInfo], caption: String?, threadRootEventID: String?) async -> Result<Void, TimelineProxyError> {
+        let requestHandle: ((SendGalleryJoinHandleProtocol) -> Void) = { [weak self] handle in
+            self?.requestGalleryHandle = handle
+        }
+        
+        var urls: [URL] = []
+        var thumbUrls: [URL] = []
+        var imageInfos: [ImageInfo] = []
+        for mediaInfo in mediaInfos {
+            switch mediaInfo {
+            case let .image(url, thumbURL, info):
+                urls.append(url)
+                thumbUrls.append(thumbURL)
+                imageInfos.append(info)
+            default: break
+            }
+        }
+        return await roomProxy.timeline.sendImages(urls: urls, thumbnailURLs: thumbUrls, imageInfos: imageInfos, caption: caption, threadRootEventID: threadRootEventID, requestHandle: requestHandle)
+        
+//        case let .video(videoURL, thumbnailURL, videoInfo):
+//            return await roomProxy.timeline.sendVideo(url: videoURL,
+//                                                      thumbnailURL: thumbnailURL,
+//                                                      videoInfo: videoInfo,
+//                                                      caption: caption,
+//                                                      threadRootEventID: threadRootEventID,
+//                                                      requestHandle: requestHandle)
+//        case let .audio(audioURL, audioInfo):
+//            return await roomProxy.timeline.sendAudio(url: audioURL,
+//                                                      audioInfo: audioInfo,
+//                                                      caption: caption,
+//                                                      threadRootEventID: threadRootEventID,
+//                                                      requestHandle: requestHandle)
+//        case let .file(fileURL, fileInfo):
+//            return await roomProxy.timeline.sendFile(url: fileURL,
+//                                                     fileInfo: fileInfo,
+//                                                     caption: caption,
+//                                                     threadRootEventID: threadRootEventID,
+//                                                     requestHandle: requestHandle)
+//        }
+    }
+    
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"
     
     private func startLoading() {
@@ -140,6 +206,7 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
         userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
         state.shouldDisableInteraction = false
         requestHandle = nil
+        requestGalleryHandle = nil
     }
     
     private func showError(label: String) {

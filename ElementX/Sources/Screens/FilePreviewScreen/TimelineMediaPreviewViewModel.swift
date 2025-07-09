@@ -74,7 +74,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
     override func process(viewAction: TimelineMediaPreviewViewAction) {
         switch viewAction {
         case .updateCurrentItem(let item):
-            Task { await updateCurrentItem(item) }
+            Task {
+                await updateCurrentItem(item)
+            }
         case .showItemDetails(let mediaItem):
             state.previewControllerDriver.send(.showItemDetails(mediaItem))
         case .menuAction(let action, let item):

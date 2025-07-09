@@ -14,7 +14,7 @@ enum TimelineInteractionHandlerAction {
     case displayEmojiPicker(itemID: TimelineItemIdentifier, selectedEmojis: Set<String>)
     case displayReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case displayMessageForwarding(itemID: TimelineItemIdentifier)
-    case displayMediaUploadPreviewScreen(url: URL)
+    case displayMediasUploadPreviewScreen(urls: [URL])
     case displayPollForm(mode: PollFormMode)
     
     case showActionMenu(TimelineItemActionMenuInfo)
@@ -289,7 +289,8 @@ class TimelineInteractionHandler {
                 return
             }
             
-            self.actionsSubject.send(.displayMediaUploadPreviewScreen(url: fileURL))
+            // <thaith> - NEED WORK MORE
+            self.actionsSubject.send(.displayMediasUploadPreviewScreen(urls: [fileURL]))
         }
     }
     
@@ -523,6 +524,8 @@ class TimelineInteractionHandler {
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
+        case is GalleryRoomTimelineItem:
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.gallery])
         case is AudioRoomTimelineItem,
              is FileRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])

@@ -13,7 +13,7 @@ struct MediaUploadPreviewScreenCoordinatorParameters {
     let roomProxy: JoinedRoomProxyProtocol
     let mediaUploadingPreprocessor: MediaUploadingPreprocessor
     let title: String?
-    let url: URL
+    let urls: [URL]
     let threadRootEventID: String?
     let shouldShowCaptionWarning: Bool
 }
@@ -36,7 +36,7 @@ final class MediaUploadPreviewScreenCoordinator: CoordinatorProtocol {
                                                       roomProxy: parameters.roomProxy,
                                                       mediaUploadingPreprocessor: parameters.mediaUploadingPreprocessor,
                                                       title: parameters.title,
-                                                      url: parameters.url,
+                                                      urls: parameters.urls,
                                                       threadRootEventID: parameters.threadRootEventID,
                                                       shouldShowCaptionWarning: parameters.shouldShowCaptionWarning)
     }

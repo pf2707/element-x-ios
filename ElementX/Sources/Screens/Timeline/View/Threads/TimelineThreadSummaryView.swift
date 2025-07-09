@@ -51,6 +51,13 @@ struct TimelineThreadSummaryView: View {
                                plainBody: content.caption ?? content.filename,
                                formattedBody: content.formattedCaption,
                                numberOfReplies: numberOfReplies)
+                case .gallery(let content):
+                    // <<thaith>> - REMOVE COMMENT THIS
+                    ThreadView(senderID: senderID,
+                               sender: sender,
+                               plainBody: "",// content.caption ?? content.filename,
+                               formattedBody: nil,// content.formattedCaption,
+                               numberOfReplies: numberOfReplies)
                 case .notice(let content):
                     ThreadView(senderID: senderID,
                                sender: sender,

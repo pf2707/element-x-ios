@@ -23,16 +23,25 @@ struct MediaUploadPreviewScreen: View {
     
     var body: some View {
         mainContent
-            .id(context.viewState.url)
+            .id(context.viewState.urls)
             .ignoresSafeArea(edges: [.horizontal])
             .safeAreaInset(edge: .bottom, spacing: 0) {
-                composer
-                    .padding(.horizontal, 12)
-                    .padding(.vertical, 16)
-                    .background() // Don't use compound so we match the QLPreviewController.
+                VStack(spacing: 0) {
+                    Divider()
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 1)
+                        .background(Color.theme(.gray_F2F2F3))
+                    composer
+                        .padding(.horizontal, 12)
+                        .padding(.vertical, 16)
+                        // Don't use compound so we match the QLPreviewController.
+                }
+                .background(.white)
             }
             .navigationTitle(title)
             .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.visible, for: .navigationBar)
+            .toolbarBackground(Color.theme(.white), for: .navigationBar)
             .toolbar { toolbar }
             .disabled(context.viewState.shouldDisableInteraction)
             .interactiveDismissDisabled()
@@ -49,8 +58,12 @@ struct MediaUploadPreviewScreen: View {
                 .foregroundColor(.compound.textSecondary)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
         } else {
-            PreviewView(fileURL: context.viewState.url,
+            // <thaith> - NEED WORK MORE
+            PreviewView(fileURLs: context.viewState.urls,
                         title: context.viewState.title)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//            PreviewView(fileURL: context.viewState.urls.first!,
+//                        title: context.viewState.title)
         }
     }
     
@@ -70,11 +83,21 @@ struct MediaUploadPreviewScreen: View {
                 }
             }
             .messageComposerStyle(isEncrypted: context.viewState.isRoomEncrypted)
+            .frame(maxWidth: .infinity)
+            .background(Color.theme(.gray_E7E7E7))
+            .cornerRadius(20)
             
-            SendButton {
+            Button {
                 context.send(viewAction: .send)
+            } label: {
+                Image("ic_tool_send")
             }
+
+//            SendButton {
+//                context.send(viewAction: .send)
+//            }
         }
+        .background(Color.theme(.white))
     }
     
     private var captionWarningButton: some View {
@@ -126,7 +149,7 @@ struct MediaUploadPreviewScreen: View {
             }
             // Fix a bug with the preferredColorScheme on iOS 18 where the button doesn't
             // follow the dark colour scheme on devices running with dark mode disabled.
-            .tint(.compound.textActionPrimary)
+            .tint(Color.theme(.blue_005CA7))
         }
     }
     
@@ -153,7 +176,7 @@ struct MediaUploadPreviewScreen: View {
 }
 
 private struct PreviewView: UIViewControllerRepresentable {
-    let fileURL: URL
+    let fileURLs: [URL]
     let title: String?
 
     func makeUIViewController(context: Context) -> UIViewController {
@@ -184,11 +207,11 @@ private struct PreviewView: UIViewControllerRepresentable {
         // MARK: - QLPreviewControllerDataSource
         
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
-            1
+            view.fileURLs.count
         }
 
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            PreviewItem(previewItemURL: view.fileURL, previewItemTitle: view.title)
+            PreviewItem(previewItemURL: view.fileURLs[index], previewItemTitle: view.title)
         }
         
         // MARK: - QLPreviewControllerDelegate
@@ -213,6 +236,11 @@ private class PreviewViewController: QLPreviewController {
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
+        //<thaith> change background to white to match figma design
+        self.view.backgroundColor = .white
+        for subview in view.subviews {
+            subview.backgroundColor = .white
+        }
         // Remove top file details bar
         navigationController?.navigationBar.isHidden = true
                 
@@ -223,24 +251,24 @@ private class PreviewViewController: QLPreviewController {
 
 // MARK: - Previews
 
-struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
-    static let snapshotURL = URL.picturesDirectory
-    static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
-    
-    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
-                                                             roomProxy: JoinedRoomProxyMock(.init()),
-                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
-                                                             title: "App Icon.png",
-                                                             url: snapshotURL,
-                                                             threadRootEventID: nil,
-                                                             shouldShowCaptionWarning: true)
-    static var previews: some View {
-        NavigationStack {
-            MediaUploadPreviewScreen(context: viewModel.context)
-        }
-        
-        MediaUploadPreviewScreen(context: viewModel.context)
-            .captionWarningContent
-            .previewDisplayName("Caption warning")
-    }
-}
+//struct MediaUploadPreviewScreen_Previews: PreviewProvider, TestablePreview {
+//    static let snapshotURL = URL.picturesDirectory
+//    static let testURL = Bundle.main.url(forResource: "AppIcon60x60@2x", withExtension: "png")
+//    
+//    static let viewModel = MediaUploadPreviewScreenViewModel(userIndicatorController: UserIndicatorControllerMock.default,
+//                                                             roomProxy: JoinedRoomProxyMock(.init()),
+//                                                             mediaUploadingPreprocessor: MediaUploadingPreprocessor(appSettings: ServiceLocator.shared.settings),
+//                                                             title: "App Icon.png",
+//                                                             urls: [snapshotURL],
+//                                                             threadRootEventID: nil,
+//                                                             shouldShowCaptionWarning: true)
+//    static var previews: some View {
+//        NavigationStack {
+//            MediaUploadPreviewScreen(context: viewModel.context)
+//        }
+//        
+//        MediaUploadPreviewScreen(context: viewModel.context)
+//            .captionWarningContent
+//            .previewDisplayName("Caption warning")
+//    }
+//}

@@ -33,7 +33,7 @@ struct RoomScreenCoordinatorParameters {
 enum RoomScreenCoordinatorAction {
     case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case presentMediaUploadPicker(MediaPickerScreenSource)
-    case presentMediaUploadPreviewScreen(URL)
+    case presentMediasUploadPreviewScreen([URL])
     case presentRoomDetails
     case presentLocationPicker
     case presentPollForm(mode: PollFormMode)
@@ -133,8 +133,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     actionsSubject.send(.presentLocationPicker)
                 case .displayPollForm(let mode):
                     actionsSubject.send(.presentPollForm(mode: mode))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.presentMediaUploadPreviewScreen(url))
+                case .displayMediasUploadPreviewScreen(let urls):
+                    actionsSubject.send(.presentMediasUploadPreviewScreen(urls))
                 case .displaySenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))
                 case .displayMessageForwarding(let forwardingItem):

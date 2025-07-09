@@ -129,6 +129,8 @@ struct MediaEventsTimelineScreen: View {
         switch item.type {
         case .image(let timelineItem):
             ImageMediaEventsTimelineView(timelineItem: timelineItem)
+        case .gallery(let timelineItem):
+            ImagesMediaEventsTimelineView(timelineItem: timelineItem)
         case .video(let timelineItem):
             VideoMediaEventsTimelineView(timelineItem: timelineItem)
         case .file(let timelineItem):

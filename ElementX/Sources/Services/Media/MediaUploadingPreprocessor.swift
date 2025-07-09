@@ -124,6 +124,15 @@ struct MediaUploadingPreprocessor {
         }
     }
     
+    func processMedias(at urls: [URL]) async -> [Result<MediaInfo, MediaUploadingPreprocessorError>] {
+        var results: [Result<MediaInfo, MediaUploadingPreprocessorError>] = []
+        for url in urls {
+            let mediaResult = await self.processMedia(at: url)
+            results.append(mediaResult)
+        }
+        return results
+    }
+    
     // MARK: - Private
     
     /// Prepares an image for upload. Strips location data from it and generates a thumbnail

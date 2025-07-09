@@ -93,7 +93,7 @@ extension EventBasedTimelineItemProtocol {
         }
 
         switch messageBasedItem.contentType {
-        case .audio, .file, .image, .video, .location, .voice:
+        case .audio, .file, .image, .gallery, .video, .location, .voice:
             return false
         case .text, .emote, .notice:
             return true

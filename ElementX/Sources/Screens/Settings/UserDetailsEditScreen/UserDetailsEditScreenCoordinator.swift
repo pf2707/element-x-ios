@@ -55,7 +55,7 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
     private func displayMediaPickerWithSource(_ source: MediaPickerScreenSource) {
         let stackCoordinator = NavigationStackCoordinator()
         
-        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, orientationManager: parameters.orientationManager) { [weak self] action in
+        let mediaPickerCoordinator = MediaPickerScreenCoordinator(userIndicatorController: parameters.userIndicatorController, source: source, allowMultipleSelections: false, orientationManager: parameters.orientationManager) { [weak self] action in
             guard let self else { return }
             switch action {
             case .cancel:
@@ -63,6 +63,9 @@ final class UserDetailsEditScreenCoordinator: CoordinatorProtocol {
             case .selectMediaAtURL(let url):
                 parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
                 viewModel.didSelectMediaURL(url: url)
+            case .selectMediasAtURLs(_):
+                preconditionFailure("Not implemented yet")
+                break
             }
         }
         

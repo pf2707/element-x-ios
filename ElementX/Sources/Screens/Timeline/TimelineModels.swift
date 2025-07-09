@@ -18,7 +18,7 @@ enum TimelineViewModelAction {
     case displayDocumentPicker
     case displayLocationPicker
     case displayPollForm(mode: PollFormMode)
-    case displayMediaUploadPreviewScreen(url: URL)
+    case displayMediasUploadPreviewScreen(urls: [URL])
     case displaySenderDetails(userID: String)
     case displayMessageForwarding(forwardingItem: MessageForwardingItem)
     case displayMediaPreview(TimelineMediaPreviewViewModel)

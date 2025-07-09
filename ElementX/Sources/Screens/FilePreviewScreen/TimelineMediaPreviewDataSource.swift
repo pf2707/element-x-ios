@@ -74,6 +74,29 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
             
             return newItem
         }
+//        var newItems: [TimelineMediaPreviewItem.Media] = []
+//        for itemViewState in itemViewStates {
+//            switch itemViewState.type {
+////            case .image(let imageRoomTimelineItem):
+////                timelineItem = imageRoomTimelineItem
+//            case .gallery(let galleryRoomTimelineItem):
+//                for info in galleryRoomTimelineItem.content.imageInfos {
+//                    if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: RoomTimelineItemViewState(item: Imageroom, groupStyle: <#T##TimelineGroupStyle#>)) {
+//                        
+//                    }
+//                }
+////            case .video(let videoRoomTimelineItem):
+////                timelineItem = videoRoomTimelineItem
+//            default:
+//                if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) {
+//                    if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+//                        oldItem.timelineItem = newItem.timelineItem
+//                        newItems.append(oldItem)
+//                    } else {
+//                        newItems.append(newItem)
+//                    }
+//                }
+//        }
         
         var hasPaginated = false
         if let range = newItems.map(\.id).firstRange(of: previewItems.map(\.id)) {
@@ -157,6 +180,8 @@ enum TimelineMediaPreviewItem: Equatable {
                 timelineItem = fileRoomTimelineItem
             case .image(let imageRoomTimelineItem):
                 timelineItem = imageRoomTimelineItem
+//            case .gallery(let galleryRoomTimelineItem):
+//                timelineItem = galleryRoomTimelineItem
             case .video(let videoRoomTimelineItem):
                 timelineItem = videoRoomTimelineItem
             default:
@@ -200,6 +225,23 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         // MARK: Media details
+        var mediaSources: [MediaSourceProxy]? {
+            switch timelineItem {
+            case let galleryItem as GalleryRoomTimelineItem:
+                galleryItem.content.imageInfos.map({ $0.source })
+            default:
+                nil
+            }
+        }
+        
+        var thumbnailMediaSources: [MediaSourceProxy]? {
+            switch timelineItem {
+            case let galleryItem as GalleryRoomTimelineItem:
+                galleryItem.content.thumbnailInfos?.map({ $0.source })
+            default:
+                nil
+            }
+        }
         
         var mediaSource: MediaSourceProxy? {
             switch timelineItem {

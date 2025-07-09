@@ -484,8 +484,8 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                     actionsSubject.send(.displayPollForm(mode: mode))
                 case .displayReportContent(let itemID, let senderID):
                     actionsSubject.send(.displayReportContent(itemID: itemID, senderID: senderID))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.displayMediaUploadPreviewScreen(url: url))
+                case .displayMediasUploadPreviewScreen(let urls):
+                    actionsSubject.send(.displayMediasUploadPreviewScreen(urls: urls))
                 case .showActionMenu(let actionMenuInfo):
                     Task {
                         await self.updatePermissions()

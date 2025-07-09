@@ -331,6 +331,22 @@ private extension ImageRoomTimelineItem {
     }
 }
 
+private extension GalleryRoomTimelineItem {
+//    init(isOutgoing: Bool, caption: String? = nil) {
+//        self.init(id: .randomEvent,
+//                  timestamp: .mock,
+//                  isOutgoing: isOutgoing,
+//                  isEditable: isOutgoing,
+//                  canBeRepliedTo: true,
+//                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+//                  content: .init(filename: "image.jpg",
+//                                 caption: caption,
+//                                 imageInfo: .mockImage,
+//                                 thumbnailInfo: nil,
+//                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+//    }
+}
+
 private extension VideoRoomTimelineItem {
     init(isOutgoing: Bool, caption: String? = nil) {
         self.init(id: .randomEvent,

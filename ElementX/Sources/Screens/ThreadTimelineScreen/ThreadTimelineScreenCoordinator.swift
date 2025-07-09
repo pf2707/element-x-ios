@@ -28,7 +28,7 @@ struct ThreadTimelineScreenCoordinatorParameters {
 enum ThreadTimelineScreenCoordinatorAction {
     case presentReportContent(itemID: TimelineItemIdentifier, senderID: String)
     case presentMediaUploadPicker(MediaPickerScreenSource, threadRootEventID: String?)
-    case presentMediaUploadPreviewScreen(url: URL, threadRootEventID: String?)
+    case presentMediasUploadPreviewScreen(urls: [URL], threadRootEventID: String?)
     case presentLocationPicker(threadRootEventID: String?)
     case presentLocationViewer(body: String, geoURI: GeoURI, description: String?, threadRootEventID: String?)
     case presentPollForm(mode: PollFormMode)
@@ -115,8 +115,8 @@ final class ThreadTimelineScreenCoordinator: CoordinatorProtocol {
                                                                description: description, threadRootEventID: parameters.timelineController.timelineKind.threadRootEventID))
                 case .displayPollForm(let mode):
                     actionsSubject.send(.presentPollForm(mode: mode))
-                case .displayMediaUploadPreviewScreen(let url):
-                    actionsSubject.send(.presentMediaUploadPreviewScreen(url: url,
+                case .displayMediasUploadPreviewScreen(let urls):
+                    actionsSubject.send(.presentMediasUploadPreviewScreen(urls: urls,
                                                                          threadRootEventID: parameters.timelineController.timelineKind.threadRootEventID))
                 case .displaySenderDetails(userID: let userID):
                     actionsSubject.send(.presentRoomMemberDetails(userID: userID))

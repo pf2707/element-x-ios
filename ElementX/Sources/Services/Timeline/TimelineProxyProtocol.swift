@@ -40,7 +40,7 @@ enum TimelineFocus {
 }
 
 enum TimelineAllowedMessageType {
-    case audio, file, image, video
+    case audio, file, image, video, gallery
 }
 
 enum TimelineProxyError: Error {
@@ -97,6 +97,13 @@ protocol TimelineProxyProtocol {
                    caption: String?,
                    threadRootEventID: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
+    
+    func sendImages(urls: [URL],
+                   thumbnailURLs: [URL],
+                   imageInfos: [ImageInfo],
+                   caption: String?,
+                   threadRootEventID: String?,
+                    requestHandle: @MainActor (SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
     func sendLocation(body: String,
                       geoURI: GeoURI,

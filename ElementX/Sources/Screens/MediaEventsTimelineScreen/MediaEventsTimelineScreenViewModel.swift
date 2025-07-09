@@ -79,7 +79,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayMediaPreview(let mediaPreviewViewModel):
                 self?.displayMediaPreview(mediaPreviewViewModel)
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
-                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
+                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediasUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
                  .displayThread, .composer, .hasScrolled, .viewInRoomTimeline, .displayRoom:
                 break
@@ -101,7 +101,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
             case .displayMediaPreview(let mediaPreviewViewModel):
                 self?.displayMediaPreview(mediaPreviewViewModel)
             case .displayEmojiPicker, .displayReportContent, .displayCameraPicker, .displayMediaPicker,
-                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediaUploadPreviewScreen,
+                 .displayDocumentPicker, .displayLocationPicker, .displayPollForm, .displayMediasUploadPreviewScreen,
                  .displaySenderDetails, .displayMessageForwarding, .displayLocation, .displayResolveSendFailure,
                  .displayThread, .composer, .hasScrolled, .viewInRoomTimeline, .displayRoom:
                 break
@@ -143,7 +143,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
-            case .image, .video:
+            case .image, .gallery, .video:
                 state.bindings.screenMode == .media
             case .audio, .file, .voice:
                 state.bindings.screenMode == .files
