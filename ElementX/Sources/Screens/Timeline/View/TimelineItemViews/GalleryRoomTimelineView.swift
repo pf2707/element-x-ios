@@ -7,10 +7,9 @@
 
 import SwiftUI
 
-// <<thaith>> - REMOVE COMMENT THIS
-struct ImagesRoomTimelineView: View {
+struct GalleryRoomTimelineView: View {
     @Environment(\.timelineContext) private var context
-    let timelineItem: ImagesRoomTimelineItem
+    let timelineItem: GalleryRoomTimelineItem
     
     var hasMediaCaption: Bool { false /*timelineItem.content.caption != nil*/ }
 

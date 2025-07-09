@@ -43,7 +43,7 @@ struct TimelineReplyView: View {
                                   plainBody: content.caption ?? content.filename,
                                   formattedBody: content.formattedCaption,
                                   icon: .init(kind: .mediaSource(content.thumbnailInfo?.source ?? content.imageInfo.source), cornerRadii: iconCornerRadii))
-                    case .images(let content):
+                    case .gallery(let content):
                         // <<thaith>> - REMOVE COMMENT THIS
                         ReplyView(sender: sender,
                                   plainBody: "", //content.caption ?? content.filename,

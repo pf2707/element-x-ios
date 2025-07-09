@@ -247,11 +247,8 @@ enum RoomTimelineItemFixtures {
             AudioRoomTimelineItem(isOutgoing: true),
             FileRoomTimelineItem(isOutgoing: false),
             FileRoomTimelineItem(isOutgoing: true, caption: "Please check this ASAP!"),
-            // <<thaith>> - REMOVE COMMENT THIS
-//            ImageRoomTimelineItem(isOutgoing: false),
-//            ImageRoomTimelineItem(isOutgoing: true, caption: "Isn't this pretty!"),
-//            ImagesRoomTimelineItem(isOutgoing: false),
-//            ImagesRoomTimelineItem(isOutgoing: true),
+            ImageRoomTimelineItem(isOutgoing: false),
+            ImageRoomTimelineItem(isOutgoing: true, caption: "Isn't this pretty!"),
             VideoRoomTimelineItem(isOutgoing: false, caption: "Woah, it was incredible!"),
             VideoRoomTimelineItem(isOutgoing: true),
             VoiceMessageRoomTimelineItem(isOutgoing: false),
@@ -318,24 +315,23 @@ private extension FileRoomTimelineItem {
     }
 }
 
-// <<thaith>> - REMOVE COMMENT THIS
-//private extension ImageRoomTimelineItem {
-//    init(isOutgoing: Bool, caption: String? = nil) {
-//        self.init(id: .randomEvent,
-//                  timestamp: .mock,
-//                  isOutgoing: isOutgoing,
-//                  isEditable: isOutgoing,
-//                  canBeRepliedTo: true,
-//                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
-//                  content: .init(filename: "image.jpg",
-//                                 caption: caption,
-//                                 imageInfo: .mockImage,
-//                                 thumbnailInfo: nil,
-//                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
-//    }
-//}
+private extension ImageRoomTimelineItem {
+    init(isOutgoing: Bool, caption: String? = nil) {
+        self.init(id: .randomEvent,
+                  timestamp: .mock,
+                  isOutgoing: isOutgoing,
+                  isEditable: isOutgoing,
+                  canBeRepliedTo: true,
+                  sender: .init(id: isOutgoing ? "@alice:matrix.org" : "@bob:matrix.org"),
+                  content: .init(filename: "image.jpg",
+                                 caption: caption,
+                                 imageInfo: .mockImage,
+                                 thumbnailInfo: nil,
+                                 blurhash: "KpE4oyayR5|GbHb];3j@of"))
+    }
+}
 
-private extension ImagesRoomTimelineItem {
+private extension GalleryRoomTimelineItem {
 //    init(isOutgoing: Bool, caption: String? = nil) {
 //        self.init(id: .randomEvent,
 //                  timestamp: .mock,

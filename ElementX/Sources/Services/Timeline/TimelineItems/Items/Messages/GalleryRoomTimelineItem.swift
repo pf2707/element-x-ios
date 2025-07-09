@@ -8,7 +8,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct ImagesRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
+struct GalleryRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable {
     let id: TimelineItemIdentifier
     let timestamp: Date
     let isOutgoing: Bool
@@ -18,7 +18,7 @@ struct ImagesRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable 
     
     let sender: TimelineItemSender
     
-    let content: ImagesRoomTimelineItemContent
+    let content: GalleryRoomTimelineItemContent
     
     var properties = RoomTimelineItemProperties()
     
@@ -27,6 +27,6 @@ struct ImagesRoomTimelineItem: EventBasedMessageTimelineItemProtocol, Equatable 
     }
     
     var contentType: EventBasedMessageTimelineItemContentType {
-        .images(content)
+        .gallery(content)
     }
 }

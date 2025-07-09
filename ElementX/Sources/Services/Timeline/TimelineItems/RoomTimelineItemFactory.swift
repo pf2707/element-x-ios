@@ -128,7 +128,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                encryptionAuthenticity: buildEncryptionAuthenticity(eventItemProxy.shieldState)))
     }
     
-    // <<thaith>> - REMOVE COMMENT THIS
     private func buildImageTimelineItem(for eventItemProxy: EventTimelineItemProxy,
                                         _ messageLikeContent: MsgLikeContent,
                                         _ messageContent: MessageContent,
@@ -157,7 +156,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                         _ messageContent: MessageContent,
                                         _ imagesMessageContent: GalleryMessageContent,
                                         _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
-        let item = ImagesRoomTimelineItem(id: eventItemProxy.id,
+        let item = GalleryRoomTimelineItem(id: eventItemProxy.id,
                               timestamp: eventItemProxy.timestamp,
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
@@ -539,7 +538,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                             contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
     
-    // <<thaith>> - REMOVE COMMENT THIS
     private func buildImageTimelineItemContent(_ messageContent: ImageMessageContent) -> ImageRoomTimelineItemContent {
         let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
         let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
@@ -566,7 +564,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                      contentType: UTType(mimeType: messageContent.info?.mimetype, fallbackFilename: messageContent.filename))
     }
     
-    private func buildImagesTimelineItemContent(_ messageContent: GalleryMessageContent) -> ImagesRoomTimelineItemContent {
+    private func buildImagesTimelineItemContent(_ messageContent: GalleryMessageContent) -> GalleryRoomTimelineItemContent {
 //        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
 //        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
         
@@ -593,7 +591,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             }
         }
         
-        return ImagesRoomTimelineItemContent(imageInfos: imageSources,
+        return GalleryRoomTimelineItemContent(imageInfos: imageSources,
                                              thumbnailInfos: thumbnailSources)
     }
     
@@ -933,14 +931,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             .emote(buildEmoteTimelineItemContent(senderDisplayName: senderDisplayName, senderID: senderID, messageContent: content))
         case .file(let content):
             .file(buildFileTimelineItemContent(content))
-            
-        // <<thaith>> - REMOVE COMMENT THIS
         case .image(let content):
             .image(buildImageTimelineItemContent(content))
-            
         case .gallery(let content):
-            .images(buildImagesTimelineItemContent(content))
-            
+            .gallery(buildImagesTimelineItemContent(content))
         case .notice(let content):
             .notice(buildNoticeTimelineItemContent(content))
         case .text(let content):
@@ -949,8 +943,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             .video(buildVideoTimelineItemContent(content))
         case .location(let content):
             .location(buildLocationTimelineItemContent(content))
-        case .gallery(let content):
-            .text(.init(body: content.body))
+//        case .gallery(let content):
+//            .text(.init(body: content.body))
         case .other(_, let body):
             .text(.init(body: body))
         case .none:

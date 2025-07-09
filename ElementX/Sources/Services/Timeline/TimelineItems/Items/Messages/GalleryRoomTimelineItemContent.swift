@@ -8,7 +8,7 @@
 import Foundation
 import UniformTypeIdentifiers
 
-struct ImagesRoomTimelineItemContent: Hashable {
+struct GalleryRoomTimelineItemContent: Hashable {
 //    let filename: String
 //    var caption: String?
 //    var formattedCaption: AttributedString?

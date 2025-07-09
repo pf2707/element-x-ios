@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ImagesMediaEventsTimelineView: View {
     @Environment(\.timelineContext) private var context
-    let timelineItem: ImagesRoomTimelineItem
+    let timelineItem: GalleryRoomTimelineItem
     
     var body: some View {
         Color.green // Let the image aspect fill in place

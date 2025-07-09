@@ -174,7 +174,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder
     var messageBubble: some View {
         switch timelineItem {
-        case is ImagesRoomTimelineItem:
+        case is GalleryRoomTimelineItem:
             contentWithReply
                 .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
         default:

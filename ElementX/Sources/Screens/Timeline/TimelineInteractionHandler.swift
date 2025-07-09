@@ -524,6 +524,8 @@ class TimelineInteractionHandler {
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
+        case is GalleryRoomTimelineItem:
+            return await mediaPreviewAction(for: timelineItem, messageTypes: [.gallery])
         case is AudioRoomTimelineItem,
              is FileRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])

@@ -43,11 +43,8 @@ final class RoomTimelineItemViewState: Identifiable, Equatable, ObservableObject
 enum RoomTimelineItemType: Equatable {
     case text(TextRoomTimelineItem)
     case separator(SeparatorRoomTimelineItem)
-    
-    // <<thaith>> - REMOVE COMMENT THIS
-//    case image(ImageRoomTimelineItem)
-    
-    case images(ImagesRoomTimelineItem)
+    case image(ImageRoomTimelineItem)
+    case gallery(GalleryRoomTimelineItem)
     case video(VideoRoomTimelineItem)
     case audio(AudioRoomTimelineItem)
     case file(FileRoomTimelineItem)
@@ -72,14 +69,10 @@ enum RoomTimelineItemType: Equatable {
         switch item {
         case let item as TextRoomTimelineItem:
             self = .text(item)
-            
-            // <<thaith>> - REMOVE COMMENT THIS
-//        case let item as ImageRoomTimelineItem:
-//            self = .image(item)
-            
-        case let item as ImagesRoomTimelineItem:
-            self = .images(item)
-            
+        case let item as ImageRoomTimelineItem:
+            self = .image(item)
+        case let item as GalleryRoomTimelineItem:
+            self = .gallery(item)
         case let item as VideoRoomTimelineItem:
             self = .video(item)
         case let item as AudioRoomTimelineItem:
@@ -129,12 +122,8 @@ enum RoomTimelineItemType: Equatable {
         switch self {
         case .text(let item as RoomTimelineItemProtocol),
              .separator(let item as RoomTimelineItemProtocol),
-             
-            // <<thaith>> - REMOVE COMMENT THIS
-//             .image(let item as RoomTimelineItemProtocol),
-            
-             .images(let item as RoomTimelineItemProtocol),
-            
+             .image(let item as RoomTimelineItemProtocol),
+             .gallery(let item as RoomTimelineItemProtocol),
              .video(let item as RoomTimelineItemProtocol),
              .audio(let item as RoomTimelineItemProtocol),
              .file(let item as RoomTimelineItemProtocol),

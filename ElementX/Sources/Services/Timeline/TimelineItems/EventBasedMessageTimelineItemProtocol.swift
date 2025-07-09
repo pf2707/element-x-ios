@@ -12,7 +12,7 @@ enum EventBasedMessageTimelineItemContentType: Hashable {
     case emote(EmoteRoomTimelineItemContent)
     case file(FileRoomTimelineItemContent)
     case image(ImageRoomTimelineItemContent)
-    case images(ImagesRoomTimelineItemContent)
+    case gallery(GalleryRoomTimelineItemContent)
     case notice(NoticeRoomTimelineItemContent)
     case text(TextRoomTimelineItemContent)
     case video(VideoRoomTimelineItemContent)
@@ -27,7 +27,7 @@ protocol EventBasedMessageTimelineItemProtocol: EventBasedTimelineItemProtocol {
 extension EventBasedMessageTimelineItemProtocol {
     var supportsMediaCaption: Bool {
         switch contentType {
-        case .audio, .file, .image, .images, .video:
+        case .audio, .file, .image, .gallery, .video:
             true
         case .emote, .notice, .text, .location, .voice:
             false
@@ -42,7 +42,7 @@ extension EventBasedMessageTimelineItemProtocol {
             content.caption
         case .image(let content):
             content.caption
-        case .images(let content):
+        case .gallery(let content):
             // <<thaith>> - REMOVE COMMENT THIS
             "" //content.caption
         case .video(let content):

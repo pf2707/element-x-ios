@@ -200,7 +200,7 @@ private extension TimelineItemSendInfo {
                 //<thaith>: update as Figma
                 message.hasMediaCaption ? .vertical(spacing: 4) : .overlay(capsuleStyle: false)
 //                .overlay(capsuleStyle: !message.hasMediaCaption)
-            case is ImagesRoomTimelineItem:
+            case is GalleryRoomTimelineItem:
                     .vertical(spacing: 4)
             case is AudioRoomTimelineItem:
                 // swiftlint:disable:next void_function_in_ternary

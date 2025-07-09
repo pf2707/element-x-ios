@@ -143,8 +143,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         
         timelineViewState.timelineState.itemViewStates.filter { itemViewState in
             switch itemViewState.type {
-                // <<thaith>> - REMOVE COMMENT THIS
-            case /*.image,*/ .images, .video:
+            case .image, .gallery, .video:
                 state.bindings.screenMode == .media
             case .audio, .file, .voice:
                 state.bindings.screenMode == .files
