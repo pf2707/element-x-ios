@@ -43,8 +43,7 @@ extension EventBasedMessageTimelineItemProtocol {
         case .image(let content):
             content.caption
         case .gallery(let content):
-            // <<thaith>> - REMOVE COMMENT THIS
-            "" //content.caption
+            content.caption
         case .video(let content):
             content.caption
         case .emote, .notice, .text, .location, .voice:
@@ -53,6 +52,6 @@ extension EventBasedMessageTimelineItemProtocol {
     }
     
     var hasMediaCaption: Bool {
-        mediaCaption != nil
+        mediaCaption != nil && mediaCaption!.isEmpty == false
     }
 }

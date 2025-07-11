@@ -72,7 +72,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         textView.delegate = context.coordinator
         textView.elementDelegate = context.coordinator
-        textView.textColor = .compound.textPrimary
+        textView.textColor = .black
         textView.isEditable = true
         textView.font = font
         textView.isSelectable = true
@@ -107,7 +107,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         // Prevent the textView from inheriting attributes from mention pills
         textView.typingAttributes = [.font: font,
-                                     .foregroundColor: UIColor.compound.textPrimary]
+                                     .foregroundColor: UIColor.black /*UIColor.compound.textPrimary*/]
         
         if textView.attributedText != text {
             // Remember the selection if only the attributes have changed.
@@ -122,7 +122,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
             
             // Re-apply the default font when setting text for e.g. edits.
             textView.font = font
-            textView.textColor = .compound.textPrimary
+            textView.textColor = .black// .compound.textPrimary
             
             if text.string.isEmpty {
                 // text cleared, probably because the written text is sent

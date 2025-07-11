@@ -126,7 +126,7 @@ class MediaEventsTimelineScreenViewModel: MediaEventsTimelineScreenViewModelType
         case .oldestItemDidDisappear:
             isOldestItemVisible = false
         case .tappedItem(let item):
-            activeTimelineViewModel.context.send(viewAction: .mediaTapped(itemID: item.identifier))
+            activeTimelineViewModel.context.send(viewAction: .singleMediaTapped(itemID: item.identifier))
         }
     }
     

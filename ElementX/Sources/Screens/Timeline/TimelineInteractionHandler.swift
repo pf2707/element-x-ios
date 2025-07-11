@@ -524,11 +524,27 @@ class TimelineInteractionHandler {
         case is ImageRoomTimelineItem,
              is VideoRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.image, .video])
-        case is GalleryRoomTimelineItem:
-            return await mediaPreviewAction(for: timelineItem, messageTypes: [.gallery])
         case is AudioRoomTimelineItem,
              is FileRoomTimelineItem:
             return await mediaPreviewAction(for: timelineItem, messageTypes: [.audio, .file])
+        default:
+            return .none
+        }
+    }
+    
+    func processGalleryItemTap(_ itemID: TimelineItemIdentifier, selectedChildIndex: Int) async -> TimelineControllerAction {
+        guard let timelineItem = timelineController.timelineItems.firstUsingStableID(itemID) as? EventBasedMessageTimelineItemProtocol else {
+            return .none
+        }
+        
+        switch timelineItem {
+        case is GalleryRoomTimelineItem:
+            let action = await mediaPreviewAction(for: timelineItem, messageTypes: [.gallery])
+            switch action {
+            case .displaySingleMediaPreview(let item, let timelineViewModel):
+                return .displayGalleryPreview(item: item, timelineViewModel: timelineViewModel, galleryChildIndex: selectedChildIndex)
+            default: return .none
+            }
         default:
             return .none
         }
@@ -546,7 +562,7 @@ class TimelineInteractionHandler {
             return .init(type: .message(.text(.init(body: item.body))), isThread: false)
         }
     }
-    
+        
     private func mediaPreviewAction(for item: EventBasedMessageTimelineItemProtocol, messageTypes: [TimelineAllowedMessageType]) async -> TimelineControllerAction {
         var newTimelineFocus: TimelineFocus?
         var newTimelinePresentation: TimelineKind.MediaPresentation?
@@ -596,9 +612,9 @@ class TimelineInteractionHandler {
                                                       timelineControllerFactory: timelineControllerFactory,
                                                       clientProxy: clientProxy)
             
-            return .displayMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
+            return .displaySingleMediaPreview(item: item, timelineViewModel: .new(timelineViewModel))
         } else {
-            return .displayMediaPreview(item: item, timelineViewModel: .active)
+            return .displaySingleMediaPreview(item: item, timelineViewModel: .active)
         }
     }
 }

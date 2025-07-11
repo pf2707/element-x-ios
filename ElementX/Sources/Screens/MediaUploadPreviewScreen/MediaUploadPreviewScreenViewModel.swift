@@ -155,40 +155,17 @@ class MediaUploadPreviewScreenViewModel: MediaUploadPreviewScreenViewModelType, 
             self?.requestGalleryHandle = handle
         }
         
-        var urls: [URL] = []
-        var thumbUrls: [URL] = []
-        var imageInfos: [ImageInfo] = []
+        var inputInfo: [MediaInfo] = []
         for mediaInfo in mediaInfos {
             switch mediaInfo {
             case let .image(url, thumbURL, info):
-                urls.append(url)
-                thumbUrls.append(thumbURL)
-                imageInfos.append(info)
+                inputInfo.append(.image(imageURL: url, thumbnailURL: thumbURL, imageInfo: info))
+            case let .video(url, thumbUrl, info):
+                inputInfo.append(.video(videoURL: url, thumbnailURL: thumbUrl, videoInfo: info))
             default: break
             }
         }
-        return await roomProxy.timeline.sendImages(urls: urls, thumbnailURLs: thumbUrls, imageInfos: imageInfos, caption: caption, threadRootEventID: threadRootEventID, requestHandle: requestHandle)
-        
-//        case let .video(videoURL, thumbnailURL, videoInfo):
-//            return await roomProxy.timeline.sendVideo(url: videoURL,
-//                                                      thumbnailURL: thumbnailURL,
-//                                                      videoInfo: videoInfo,
-//                                                      caption: caption,
-//                                                      threadRootEventID: threadRootEventID,
-//                                                      requestHandle: requestHandle)
-//        case let .audio(audioURL, audioInfo):
-//            return await roomProxy.timeline.sendAudio(url: audioURL,
-//                                                      audioInfo: audioInfo,
-//                                                      caption: caption,
-//                                                      threadRootEventID: threadRootEventID,
-//                                                      requestHandle: requestHandle)
-//        case let .file(fileURL, fileInfo):
-//            return await roomProxy.timeline.sendFile(url: fileURL,
-//                                                     fileInfo: fileInfo,
-//                                                     caption: caption,
-//                                                     threadRootEventID: threadRootEventID,
-//                                                     requestHandle: requestHandle)
-//        }
+        return await roomProxy.timeline.sendGallery(mediaInfos: inputInfo, caption: caption, threadRootEventID: threadRootEventID, requestHandle: requestHandle)
     }
     
     private static let loadingIndicatorIdentifier = "\(MediaUploadPreviewScreenViewModel.self)-Loading"

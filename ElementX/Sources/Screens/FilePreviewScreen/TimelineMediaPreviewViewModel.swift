@@ -29,7 +29,9 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
          mediaProvider: MediaProviderProtocol,
          photoLibraryManager: PhotoLibraryManagerProtocol,
          userIndicatorController: UserIndicatorControllerProtocol,
-         appMediator: AppMediatorProtocol) {
+         appMediator: AppMediatorProtocol,
+         //Used only for Gallery item, indicates the selected child index of Gallery item
+         initialSelectedIndex: Int = -1) {
         self.timelineViewModel = timelineViewModel
         self.mediaProvider = mediaProvider
         self.photoLibraryManager = photoLibraryManager
@@ -38,9 +40,8 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
         
         let timelineState = timelineViewModel.context.viewState.timelineState
         
-        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: .init(itemViewStates: timelineState.itemViewStates,
-                                                                                     initialItem: initialItem,
-                                                                                     paginationState: timelineState.paginationState)),
+        let datasource = TimelineMediaPreviewDataSource(itemViewStates: timelineState.itemViewStates, initialItem: initialItem, paginationState: timelineState.paginationState, initialGalleryChildIndex: initialSelectedIndex)
+        super.init(initialViewState: TimelineMediaPreviewViewState(dataSource: datasource),
                    mediaProvider: mediaProvider)
         
         rebuildCurrentItemActions()
@@ -58,6 +59,7 @@ class TimelineMediaPreviewViewModel: TimelineMediaPreviewViewModelType {
             .removeDuplicates()
             .sink { [weak self] itemViewStates in
                 self?.state.dataSource.updatePreviewItems(itemViewStates: itemViewStates)
+            
             }
             .store(in: &cancellables)
         

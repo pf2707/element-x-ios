@@ -62,8 +62,6 @@ struct MediaUploadPreviewScreen: View {
             PreviewView(fileURLs: context.viewState.urls,
                         title: context.viewState.title)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            PreviewView(fileURL: context.viewState.urls.first!,
-//                        title: context.viewState.title)
         }
     }
     

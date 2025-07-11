@@ -46,7 +46,8 @@ enum TimelineViewAction {
     case itemAppeared(itemID: TimelineItemIdentifier)
     case itemDisappeared(itemID: TimelineItemIdentifier)
     
-    case mediaTapped(itemID: TimelineItemIdentifier)
+    case singleMediaTapped(itemID: TimelineItemIdentifier)
+    case galleryTapped(itemID: TimelineItemIdentifier, childIndex: Int)
     case itemSendInfoTapped(itemID: TimelineItemIdentifier)
     case toggleReaction(key: String, itemID: TimelineItemIdentifier)
     case sendReadReceiptIfNeeded(TimelineItemIdentifier)

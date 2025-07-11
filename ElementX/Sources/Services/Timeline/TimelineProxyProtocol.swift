@@ -98,9 +98,7 @@ protocol TimelineProxyProtocol {
                    threadRootEventID: String?,
                    requestHandle: @MainActor (SendAttachmentJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>
     
-    func sendImages(urls: [URL],
-                   thumbnailURLs: [URL],
-                   imageInfos: [ImageInfo],
+    func sendGallery(mediaInfos: [MediaInfo],
                    caption: String?,
                    threadRootEventID: String?,
                     requestHandle: @MainActor (SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>

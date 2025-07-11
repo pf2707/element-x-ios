@@ -175,6 +175,16 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubble: some View {
         switch timelineItem {
         case is GalleryRoomTimelineItem:
+//            if timelineItem.hasMediaCaption {
+//                contentWithReply
+//                    .bubbleBackground(isOutgoing: timelineItem.isOutgoing,
+//                                      insets: EdgeInsets.zero,
+//                                      color: timelineItem.bubbleBackgroundColor)
+//                    .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
+//            } else {
+//                contentWithReply
+//                    .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
+//            }
             contentWithReply
                 .timelineItemSendInfo(timelineItem: timelineItem, adjustedDeliveryStatus: adjustedDeliveryStatus, context: context)
         default:
@@ -239,7 +249,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 }
 
-private extension EventBasedTimelineItemProtocol {
+extension EventBasedTimelineItemProtocol {
     var bubbleBackgroundColor: Color? {
 //        let defaultColor: Color = isOutgoing ? .compound._bgBubbleOutgoing : .compound._bgBubbleIncoming
         let defaultColor: Color = isOutgoing ? Color.theme(.blue_005CA7) :

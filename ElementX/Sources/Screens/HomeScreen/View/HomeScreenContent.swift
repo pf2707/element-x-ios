@@ -271,17 +271,7 @@ struct HomeScreenContent: View {
                         .autocorrectionDisabled()
                         .truncationMode(.head)
                         .textInputAutocapitalization(.never)
-//                        .showTextfieldClearButton($context.isSearchFieldFocused)
-//                        .onChange(of: searchText) { text in
-//                            print("search text changed = \(text)") // You can do anything due to the change here.
-//                            if !text.isEmpty {
-//                                model.search(text: text)
-//                            }
-//                        }
                         .submitLabel(.search)
-                        .onSubmit {
-                            //doSearch()
-                        }
                         .isSearching($context.isSearchFieldFocused)
                         .focused($isFocused)
                         .onChange(of: isFocused) { oldValue, newValue in

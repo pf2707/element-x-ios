@@ -160,8 +160,10 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
             Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
             Task { await timelineController.processItemDisappearance(id) }
-        case .mediaTapped(let id):
-            Task { await handleMediaTapped(with: id) }
+        case .singleMediaTapped(let id):
+            Task { await handleSingleMediaTapped(with: id) }
+        case .galleryTapped(let id, let childIndex):
+            Task { await handleGalleryTapped(with: id, childIndex: childIndex) }
         case .itemSendInfoTapped(let itemID):
             handleItemSendInfoTapped(itemID: itemID)
         case .toggleReaction(let emoji, let itemID):
@@ -617,20 +619,33 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
         await timelineController.sendReadReceipt(for: lastVisibleItemID)
     }
 
-    private func handleMediaTapped(with itemID: TimelineItemIdentifier) async {
+    private func handleSingleMediaTapped(with itemID: TimelineItemIdentifier) async {
         state.showLoading = true
         let action = await timelineInteractionHandler.processItemTap(itemID)
         
         switch action {
-        case .displayMediaPreview(let item, let timelineViewModelKind):
+        case .displaySingleMediaPreview(let item, let timelineViewModelKind):
             actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
             
             let mediaPreviewViewModel = makeMediaPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind)
             actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
         case .displayLocation(let body, let geoURI, let description):
             actionsSubject.send(.displayLocation(body: body, geoURI: geoURI, description: description))
-        case .none:
-            break
+        default: break
+        }
+        state.showLoading = false
+    }
+    
+    private func handleGalleryTapped(with itemID: TimelineItemIdentifier, childIndex: Int) async {
+        state.showLoading = true
+        let action = await timelineInteractionHandler.processGalleryItemTap(itemID, selectedChildIndex: childIndex)
+        
+        switch action {
+        case .displayGalleryPreview(let item, let timelineViewModelKind, let galleryChildIndex):
+            actionsSubject.send(.composer(action: .removeFocus)) // Hide the keyboard otherwise a big white space is sometimes shown when dismissing the preview.
+            let mediaPreviewViewModel = makeGalleryPreviewViewModel(item: item, timelineViewModelKind: timelineViewModelKind, selectedChildIndex: galleryChildIndex)
+            actionsSubject.send(.displayMediaPreview(mediaPreviewViewModel))
+        default: break
         }
         state.showLoading = false
     }
@@ -748,6 +763,23 @@ class TimelineViewModel: TimelineViewModelType, TimelineViewModelProtocol {
                                              photoLibraryManager: PhotoLibraryManager(),
                                              userIndicatorController: userIndicatorController,
                                              appMediator: appMediator)
+    }
+    
+    private func makeGalleryPreviewViewModel(item: EventBasedMessageTimelineItemProtocol,
+                                           timelineViewModelKind: TimelineControllerAction.TimelineViewModelKind,
+                                             selectedChildIndex: Int) -> TimelineMediaPreviewViewModel {
+        let timelineViewModel = switch timelineViewModelKind {
+        case .active: self
+        case .new(let newViewModel): newViewModel
+        }
+        
+        return TimelineMediaPreviewViewModel(initialItem: item,
+                                             timelineViewModel: timelineViewModel,
+                                             mediaProvider: mediaProvider,
+                                             photoLibraryManager: PhotoLibraryManager(),
+                                             userIndicatorController: userIndicatorController,
+                                             appMediator: appMediator,
+                                             initialSelectedIndex: selectedChildIndex)
     }
     
     // MARK: - Timeline Item Building

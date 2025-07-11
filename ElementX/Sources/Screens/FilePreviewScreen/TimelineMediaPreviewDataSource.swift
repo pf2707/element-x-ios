@@ -25,6 +25,7 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     private let initialItem: EventBasedMessageTimelineItemProtocol
     /// The index of the initial item inside of `previewItems` that is to be shown.
     let initialItemIndex: Int
+    let galleryChildIndex: Int
     
     /// The media item that is currently being previewed.
     private(set) var currentItem: TimelineMediaPreviewItem
@@ -37,17 +38,22 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     init(itemViewStates: [RoomTimelineItemViewState],
          initialItem: EventBasedMessageTimelineItemProtocol,
          initialPadding: Int = 100,
-         paginationState: PaginationState) {
+         paginationState: PaginationState,
+         initialGalleryChildIndex: Int = -1) {
         previewItems = itemViewStates.compactMap(TimelineMediaPreviewItem.Media.init)
         self.initialItem = initialItem
+        self.galleryChildIndex = initialGalleryChildIndex
         
-        if let initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
+        if var initialItemArrayIndex = previewItems.firstIndex(where: { $0.id == initialItem.id.eventOrTransactionID }) {
+            if initialGalleryChildIndex > 0 {
+                initialItemArrayIndex += initialGalleryChildIndex
+            }
             initialItemIndex = initialItemArrayIndex + initialPadding
             currentItem = .media(previewItems[initialItemArrayIndex])
         } else {
             // The timeline hasn't loaded the initial item yet, so replace the whatever was loaded with
             // the item the user wants to preview.
-            initialItemIndex = initialPadding
+            initialItemIndex = initialPadding + (galleryChildIndex > 0 ? galleryChildIndex : 0)
             previewItems = [.init(timelineItem: initialItem)]
             currentItem = .media(previewItems[0])
         }
@@ -63,40 +69,57 @@ class TimelineMediaPreviewDataSource: NSObject, QLPreviewControllerDataSource {
     }
     
     func updatePreviewItems(itemViewStates: [RoomTimelineItemViewState]) {
-        let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates.compactMap { itemViewState in
-            guard let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) else { return nil }
-            
-            // If an item already exists use that instead to preserve the file handle, download error etc.
-            if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
-                oldItem.timelineItem = newItem.timelineItem
-                return oldItem
-            }
-            
-            return newItem
-        }
-//        var newItems: [TimelineMediaPreviewItem.Media] = []
-//        for itemViewState in itemViewStates {
-//            switch itemViewState.type {
-////            case .image(let imageRoomTimelineItem):
-////                timelineItem = imageRoomTimelineItem
-//            case .gallery(let galleryRoomTimelineItem):
-//                for info in galleryRoomTimelineItem.content.imageInfos {
-//                    if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: RoomTimelineItemViewState(item: Imageroom, groupStyle: <#T##TimelineGroupStyle#>)) {
-//                        
-//                    }
-//                }
-////            case .video(let videoRoomTimelineItem):
-////                timelineItem = videoRoomTimelineItem
-//            default:
-//                if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) {
-//                    if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
-//                        oldItem.timelineItem = newItem.timelineItem
-//                        newItems.append(oldItem)
-//                    } else {
-//                        newItems.append(newItem)
-//                    }
-//                }
+       
+//        let newItems: [TimelineMediaPreviewItem.Media] = itemViewStates.compactMap { itemViewState in
+//            guard let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) else { return nil }
+//            
+//            //If an item already exists use that instead to preserve the file handle, download error etc.
+//            if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+//                oldItem.timelineItem = newItem.timelineItem
+//                return oldItem
+//            }
+//            
+//            return newItem
 //        }
+        
+        var newItems: [TimelineMediaPreviewItem.Media] = []
+        for itemViewState in itemViewStates {
+            switch itemViewState.type {
+                //            case .image(let imageRoomTimelineItem):
+                //                timelineItem = imageRoomTimelineItem
+            case .gallery(let rootItem):
+                let galleryProxies = rootItem.content.galleryProxies
+                let thumbnails = rootItem.content.thumbnailInfos
+                
+//                let proxy = galleryProxies.first!
+                galleryProxies.enumerated().forEach { index, proxy in
+                let thumb = thumbnails?[safe: index]
+                    switch proxy {
+                    case .imageProxy(let proxy):
+                        let itemContent = ImageRoomTimelineItemContent(filename: "", imageInfo: proxy, thumbnailInfo: thumb)
+                        let itemTimeline = ImageRoomTimelineItem(id: rootItem.id, timestamp: rootItem.timestamp, isOutgoing: rootItem.isOutgoing, isEditable: rootItem.isEditable, canBeRepliedTo: rootItem.canBeRepliedTo, sender: rootItem.sender, content: itemContent)
+                        if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: RoomTimelineItemViewState(item: itemTimeline, groupStyle: .single)) {
+                            newItems.append(newItem)
+                        }
+                    case .videoProxy(let proxy):
+                        let itemContent = VideoRoomTimelineItemContent(filename: "", videoInfo: proxy, thumbnailInfo: thumb)
+                        let itemTimeline = VideoRoomTimelineItem(id: rootItem.id, timestamp: rootItem.timestamp, isOutgoing: rootItem.isOutgoing, isEditable: rootItem.isEditable, canBeRepliedTo: rootItem.canBeRepliedTo, sender: rootItem.sender, content: itemContent)
+                        if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: RoomTimelineItemViewState(item: itemTimeline, groupStyle: .single)) {
+                            newItems.append(newItem)
+                        }
+                    }
+                }
+            default:
+                if let newItem = TimelineMediaPreviewItem.Media(roomTimelineItemViewState: itemViewState) {
+                    if let oldItem = previewItems.first(where: { $0.id == newItem.id }) {
+                        oldItem.timelineItem = newItem.timelineItem
+                        newItems.append(oldItem)
+                    } else {
+                        newItems.append(newItem)
+                    }
+                }
+            }
+        }
         
         var hasPaginated = false
         if let range = newItems.map(\.id).firstRange(of: previewItems.map(\.id)) {
@@ -180,8 +203,6 @@ enum TimelineMediaPreviewItem: Equatable {
                 timelineItem = fileRoomTimelineItem
             case .image(let imageRoomTimelineItem):
                 timelineItem = imageRoomTimelineItem
-//            case .gallery(let galleryRoomTimelineItem):
-//                timelineItem = galleryRoomTimelineItem
             case .video(let videoRoomTimelineItem):
                 timelineItem = videoRoomTimelineItem
             default:
@@ -225,24 +246,6 @@ enum TimelineMediaPreviewItem: Equatable {
         }
         
         // MARK: Media details
-        var mediaSources: [MediaSourceProxy]? {
-            switch timelineItem {
-            case let galleryItem as GalleryRoomTimelineItem:
-                galleryItem.content.imageInfos.map({ $0.source })
-            default:
-                nil
-            }
-        }
-        
-        var thumbnailMediaSources: [MediaSourceProxy]? {
-            switch timelineItem {
-            case let galleryItem as GalleryRoomTimelineItem:
-                galleryItem.content.thumbnailInfos?.map({ $0.source })
-            default:
-                nil
-            }
-        }
-        
         var mediaSource: MediaSourceProxy? {
             switch timelineItem {
             case let audioItem as AudioRoomTimelineItem:

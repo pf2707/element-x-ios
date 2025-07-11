@@ -23,7 +23,8 @@ enum TimelineControllerAction {
         case new(TimelineViewModel)
     }
     
-    case displayMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
+    case displaySingleMediaPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind)
+    case displayGalleryPreview(item: EventBasedMessageTimelineItemProtocol, timelineViewModel: TimelineViewModelKind, galleryChildIndex: Int)
     case displayLocation(body: String, geoURI: GeoURI, description: String?)
     case none
 }

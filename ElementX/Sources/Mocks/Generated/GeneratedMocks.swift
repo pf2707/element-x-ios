@@ -16366,7 +16366,7 @@ class TimelineProxyMock: TimelineProxyProtocol, @unchecked Sendable {
     }
     
     var sendImagesUrlThumbnailURLImageInfoCaptionThreadRootEventIDRequestHandleClosure: (([URL], [URL], [ImageInfo], String?, String?, @MainActor (SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError>)?
-    func sendImages(urls: [URL], thumbnailURLs: [URL], imageInfos: [ImageInfo], caption: String?, threadRootEventID: String?, requestHandle: @MainActor (any SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
+    func sendGallery(mediaInfos: [MediaInfo], caption: String?, threadRootEventID: String?, requestHandle: @MainActor (any SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
         return .failure(.failedRedacting)
     }
     //MARK: - sendLocation

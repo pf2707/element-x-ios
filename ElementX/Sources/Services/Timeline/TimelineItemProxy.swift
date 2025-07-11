@@ -323,24 +323,9 @@ struct ImageInfoProxy: Hashable {
     }
 }
 
-struct ImagesInfoProxy: Hashable {
-    let sources: [ImageInfoProxy]
-    
-    init(sources: [ImageInfoProxy]) {
-        self.sources = sources
-    }
-    
-    static var mockImages: ImagesInfoProxy {
-        guard let mediaSource = try? MediaSourceProxy(url: .mockMXCImage, mimeType: "image/jpg") else {
-            fatalError("Invalid mock media source URL")
-        }
-        
-        return ImagesInfoProxy(sources: [])
-    }
-    
-    static var mockThumbnails: ImagesInfoProxy {
-        return ImagesInfoProxy(sources: [])
-    }
+enum GalleryInfoProxy: Hashable {
+    case imageProxy(ImageInfoProxy)
+    case videoProxy(VideoInfoProxy)
 }
 
 private struct MediaInfoProxy: Hashable {

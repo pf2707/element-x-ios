@@ -10,12 +10,13 @@ import UniformTypeIdentifiers
 
 struct GalleryRoomTimelineItemContent: Hashable {
 //    let filename: String
-//    var caption: String?
-//    var formattedCaption: AttributedString?
+    var caption: String?
+    var formattedCaption: AttributedString?
 //    /// The original textual representation of the formatted caption directly from the event (usually HTML code)
 //    var formattedCaptionHTMLString: String?
     
-    let imageInfos: [ImageInfoProxy]
+    let galleryProxies: [GalleryInfoProxy]
+//    let imageInfos: [ImageInfoProxy]
     let thumbnailInfos: [ImageInfoProxy]?
     
 //    var blurhash: String?

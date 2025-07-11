@@ -180,6 +180,9 @@ class TimelineMediaPreviewController: QLPreviewController {
             if dataSource.previewController(self, previewItemAt: currentPreviewItemIndex) is TimelineMediaPreviewItem.Media {
                 refreshCurrentPreviewItem() // This will trigger loadCurrentItem automatically.
             }
+        } else {
+            //<thaith> - force refresh - need check again
+            refreshCurrentPreviewItem()
         }
     }
     

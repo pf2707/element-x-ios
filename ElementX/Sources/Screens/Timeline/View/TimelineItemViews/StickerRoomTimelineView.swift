@@ -25,7 +25,7 @@ struct StickerRoomTimelineView: View {
             .accessibilityElement(children: .ignore)
             .accessibilityLabel("\(L10n.commonSticker), \(timelineItem.body)")
             .onTapGesture {
-                context?.send(viewAction: .mediaTapped(itemID: timelineItem.id))
+                context?.send(viewAction: .singleMediaTapped(itemID: timelineItem.id))
             }
         }
     }

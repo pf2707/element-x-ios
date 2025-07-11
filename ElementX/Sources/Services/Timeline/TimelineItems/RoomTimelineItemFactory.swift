@@ -565,11 +565,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildImagesTimelineItemContent(_ messageContent: GalleryMessageContent) -> GalleryRoomTimelineItemContent {
-//        let htmlCaption = messageContent.formattedCaption?.format == .html ? messageContent.formattedCaption?.body : nil
-//        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.caption)
+        let htmlCaption = messageContent.formatted?.format == .html ? messageContent.formatted?.body : nil
+        let formattedCaption = htmlCaption != nil ? attributedStringBuilder.fromHTML(htmlCaption) : attributedStringBuilder.fromPlain(messageContent.body)
         
         var thumbnailSources: [ImageInfoProxy] = []
-        var imageSources: [ImageInfoProxy] = []
+        var proxies: [GalleryInfoProxy] = []
         for item in messageContent.itemtypes {
             switch item {
             case .image(let content):
@@ -581,17 +581,36 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                     thumbnailSources.append(thumbProxy)
                 }
                 
-                let imageProxy = ImageInfoProxy(source: content.source,
+                let proxy = ImageInfoProxy(source: content.source,
                                                   width: content.info?.width,
                                                   height: content.info?.height,
                                                   mimeType: content.info?.mimetype,
                                                   fileSize: content.info?.size.map(UInt.init))
-                imageSources.append(imageProxy)
+                proxies.append(.imageProxy(proxy))
+                
+            case .video(let content):
+                if let thumbProxy = ImageInfoProxy(source: content.info?.thumbnailSource,
+                                              width: content.info?.thumbnailInfo?.width,
+                                              height: content.info?.thumbnailInfo?.height,
+                                              mimeType: content.info?.thumbnailInfo?.mimetype,
+                                              fileSize: content.info?.size.map(UInt.init)) {
+                    thumbnailSources.append(thumbProxy)
+                }
+                
+                let proxy = VideoInfoProxy(source: content.source,
+                                           duration: content.info?.duration ?? 0,
+                                           width: content.info?.width,
+                                           height: content.info?.height,
+                                           mimeType: content.info?.mimetype,
+                                           fileSize: content.info?.size.map(UInt.init))
+                proxies.append(.videoProxy(proxy))
             default: break
             }
         }
         
-        return GalleryRoomTimelineItemContent(imageInfos: imageSources,
+        return GalleryRoomTimelineItemContent(caption: messageContent.body,
+                                              formattedCaption: formattedCaption,
+                                              galleryProxies: proxies,
                                              thumbnailInfos: thumbnailSources)
     }
     

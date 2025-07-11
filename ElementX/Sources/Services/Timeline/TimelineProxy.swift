@@ -334,13 +334,11 @@ final class TimelineProxy: TimelineProxyProtocol {
         return .success(())
     }
 
-    func sendImages(urls: [URL],
-                   thumbnailURLs: [URL],
-                   imageInfos: [ImageInfo],
+    func sendGallery(mediaInfos: [MediaInfo],
                    caption: String?,
                    threadRootEventID: String?,
                     requestHandle: @MainActor (SendGalleryJoinHandleProtocol) -> Void) async -> Result<Void, TimelineProxyError> {
-        MXLog.info("Sending images")
+        MXLog.info("Sending gallery")
         
         let replyParameters: ReplyParameters? = if let threadRootEventID {
             ReplyParameters(eventId: threadRootEventID, enforceThread: true, replyWithinThread: false)
@@ -350,14 +348,19 @@ final class TimelineProxy: TimelineProxyProtocol {
         
         do {
             var items: [GalleryItemInfo] = []
-            for i in 0 ..< urls.count {
-                let url = urls[i]
-                let thumbnailUrl = thumbnailURLs[i]
-                let imageInfo = imageInfos[i]
+            for i in 0 ..< mediaInfos.count {
+                let mediaInfo = mediaInfos[i]
                 
                 // <<thaith>> - FIX HERE FOR MIX IMAGES AND VIDEOS
-                let itemInfo: GalleryItemInfo = .image(imageInfo: imageInfo, filename: url.path(percentEncoded: false), caption: caption, formattedCaption: nil, thumbnailPath: thumbnailUrl.path(percentEncoded: false))
-                items.append(itemInfo)
+                switch mediaInfo {
+                case .image(let url, let thumbUrl, let info):
+                    let itemInfo: GalleryItemInfo = .image(imageInfo: info, filename: url.path(percentEncoded: false), caption: caption, formattedCaption: nil, thumbnailPath: thumbUrl.path(percentEncoded: false))
+                    items.append(itemInfo)
+                case .video(let url, let thumbUrl, let info):
+                    let itemInfo: GalleryItemInfo = .video(videoInfo: info, filename: url.path(percentEncoded: false), caption: caption, formattedCaption: nil, thumbnailPath: thumbUrl.path(percentEncoded: false))
+                    items.append(itemInfo)
+                default: break
+                }
             }
             let handle = try timeline.sendGallery(params: .init(caption: caption, formattedCaption: nil, mentions: nil, replyParams: replyParameters), itemInfos: items)
             
